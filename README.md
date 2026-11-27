@@ -12,6 +12,8 @@ There are up to three parts:
 
 - It only looks at rows currently on screen in the "All files" view, one video at a time.
 - It reads the video with a `<video>` element. The browser fetches only the parts it needs via HTTP range requests (the index and the data around second 1), not the whole file.
+- With the browser's data saver on (`navigator.connection.saveData`, Chrome and Android), it renders nothing.
+- On mobile: if the browser ignores `preload` (iOS Safari), the script briefly starts muted playback to get the video loading. Before drawing it waits for the decoded frame (`requestVideoFrameCallback`), so mobile browsers don't hand out a black image.
 - Videos the browser can't decode (often HEVC, MKV, AVI, depending on browser) are remembered in `localStorage` and not retried for 30 days. Use the worker for those.
 - To switch it off in one browser: `localStorage.setItem('clientside_video_thumbnails.disabled', '1')` in the developer console.
 
