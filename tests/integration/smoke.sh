@@ -134,6 +134,11 @@ check "the video in the copied folder has the thumbnail" true "$(has_preview vtr
 # Moves need no help: Nextcloud keeps the file ID even across storages. Guards that assumption.
 occ app:enable files_external >/dev/null
 ext_id="$(occ files_external:create /vtr-ext local null::null -c datadir=/tmp | grep -oE '[0-9]+' | tail -1)"
+# Like routes, an app enabled via occ reaches the web server only after a moment
+for _ in $(seq 1 30); do
+	[[ "$(admin -X PROPFIND -H 'Depth: 0' "$DAV/vtr-ext" -o /dev/null -w '%{http_code}')" == 207 ]] && break
+	sleep 2
+done
 old_id="$(file_id vtr-test/copy.mp4)"
 check "move to an external storage" 201 "$(dav_to MOVE vtr-test/copy.mp4 vtr-ext/moved.mp4)"
 check "the move to another storage kept the file ID" "$old_id" "$(file_id vtr-ext/moved.mp4)"
