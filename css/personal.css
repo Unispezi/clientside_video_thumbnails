@@ -7,6 +7,11 @@
 	display: block;
 }
 
+/* The rule above would otherwise beat Nextcloud's .hidden */
+#clientside-video-thumbnails-personal progress.hidden {
+	display: none;
+}
+
 #clientside-video-thumbnails-personal .cvt-current {
 	color: var(--color-text-maxcontrast);
 	overflow-wrap: anywhere;

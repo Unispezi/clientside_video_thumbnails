@@ -174,8 +174,14 @@
 					}
 					report()
 				}
-				if (stopRequested) {
+				if (videos.length === 0) {
+					status.textContent = translate('No videos found.')
+				} else if (missing.length === 0) {
+					status.textContent = translatePlural('{count} video, it has a thumbnail.', '{count} videos, all have a thumbnail.', videos.length, { count: videos.length })
+				} else if (stopRequested) {
 					status.textContent += ' ' + translate('Stopped.')
+				} else {
+					status.textContent += ' ' + translate('Finished.')
 				}
 			} catch (e) {
 				status.textContent = e.message
