@@ -14,10 +14,10 @@
 
 	<p>
 		<input id="cvt-retry" type="checkbox" class="checkbox">
-		<label for="cvt-retry"><?php p($l->t('Also retry videos this browser could not render before')); ?></label>
+		<label for="cvt-retry"><?php p($l->t('Retry videos with errors')); ?></label>
 	</p>
 
-	<button id="cvt-start" class="button primary" type="button"><?php p($l->t('Find and fix')); ?></button>
+	<button id="cvt-start" class="button primary" type="button"><?php p($l->t('Create missing thumbnails')); ?></button>
 	<button id="cvt-stop" class="button hidden" type="button"><?php p($l->t('Stop')); ?></button>
 
 	<ul id="cvt-warnings" class="cvt-warnings hidden"></ul>
@@ -30,23 +30,23 @@
 		<ul id="cvt-failures-list"></ul>
 	</details>
 
-	<h3><?php p($l->t('When to render in Files')); ?></h3>
+	<h3><?php p($l->t('Automaticalle generate video thumbnails')); ?></h3>
 	<p class="settings-hint">
-		<?php p($l->t('Applies to your account on all your devices, for the thumbnails rendered while you browse your files. Browsers that can\'t tell their network or battery state, such as Safari and Firefox, render anyway.')); ?>
+		<?php p($l->t('Generate video thumbnails when videos are listed. This will download a part of the video and upload the thumbnail, so it uses some battery and network traffic.')); ?>
 	</p>
 	<p>
 		<input id="cvt-wifi-only" type="checkbox" class="checkbox">
-		<label for="cvt-wifi-only"><?php p($l->t('Only on Wi-Fi or Ethernet')); ?></label>
+		<label for="cvt-wifi-only"><?php p($l->t('Mobile Device: Only on Wi-Fi')); ?></label>
 	</p>
 	<p>
 		<input id="cvt-charging-only" type="checkbox" class="checkbox">
-		<label for="cvt-charging-only"><?php p($l->t('Only while charging')); ?></label>
+		<label for="cvt-charging-only"><?php p($l->t('Mobile Device: Only while charging')); ?></label>
 	</p>
 	<p id="cvt-device-state" class="cvt-current" aria-live="polite"></p>
 
-	<h3><?php p($l->t('Delete my thumbnails')); ?></h3>
+	<h3><?php p($l->t('Delete ALL my thumbnails')); ?></h3>
 	<p class="settings-hint">
-		<?php p($l->t('Deletes the thumbnails of all your own videos. Videos others shared with you keep theirs. Your videos get new ones the next time they show up in Files or here.')); ?>
+		<?php p($l->t('Deletes ALL existing video thumbnails. They will be re-generated the next time the video is listed.')); ?>
 	</p>
 	<button id="cvt-delete-mine" class="button" type="button"><?php p($l->t('Delete all my thumbnails')); ?></button>
 	<span id="cvt-delete-mine-status" aria-live="polite"></span>
