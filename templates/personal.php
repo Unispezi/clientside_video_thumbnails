@@ -6,7 +6,8 @@
  * @var \OCP\IL10N $l
  */
 ?>
-<div id="clientside-video-thumbnails-personal" class="section">
+<div id="clientside-video-thumbnails-personal">
+<div class="section">
 	<h2><?php p($l->t('Find and fix videos without thumbnail')); ?></h2>
 	<p class="settings-hint">
 		<?php p($l->t('Searches all your files for videos without a preview and renders one in this browser. Keep this page open until it is done. Each video costs a few MB of data.')); ?>
@@ -29,8 +30,10 @@
 		<summary id="cvt-failures-title"></summary>
 		<ul id="cvt-failures-list"></ul>
 	</details>
+</div>
 
-	<h3><?php p($l->t('Automatically generate video thumbnails')); ?></h3>
+<div class="section">
+	<h2><?php p($l->t('Automatically generate video thumbnails')); ?></h2>
 	<p class="settings-hint">
 		<?php p($l->t('Generate video thumbnails when videos are listed. This will download a part of the video and upload the thumbnail, so it uses some battery and network traffic.')); ?>
 	</p>
@@ -43,11 +46,14 @@
 		<label for="cvt-charging-only"><?php p($l->t('Mobile device: only while charging')); ?></label>
 	</p>
 	<p id="cvt-device-state" class="cvt-current" aria-live="polite"></p>
+</div>
 
-	<h3><?php p($l->t('Delete ALL my thumbnails')); ?></h3>
+<div class="section">
+	<h2><?php p($l->t('Delete ALL my thumbnails')); ?></h2>
 	<p class="settings-hint">
 		<?php p($l->t('Deletes ALL existing video thumbnails. They will be regenerated the next time the video is listed.')); ?>
 	</p>
 	<button id="cvt-delete-mine" class="button" type="button"><?php p($l->t('Delete all my thumbnails')); ?></button>
 	<span id="cvt-delete-mine-status" aria-live="polite"></span>
+</div>
 </div>
