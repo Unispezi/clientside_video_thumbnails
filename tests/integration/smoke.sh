@@ -123,7 +123,7 @@ check "deleteMine counts only bob's own video" '"deleted":1' "$(bob_body -X POST
 check "bob's video lost its thumbnail" false "$(bob_has_preview bob.mp4)"
 check "the shared video kept its thumbnail" true "$(has_preview vtr-test/sample.mp4)"
 
-echo "== thumbnails follow copies and moves"
+echo "== thumbnails follow copies, and stay through moves"
 dav_to() { admin -X "$1" -H "Destination: $DAV/$3" "$DAV/$2" -o /dev/null -w '%{http_code}'; }
 check "copy of a video" 201 "$(dav_to COPY vtr-test/sample.mp4 vtr-test/copy.mp4)"
 check "the copy has the thumbnail" true "$(has_preview vtr-test/copy.mp4)"
@@ -131,13 +131,15 @@ admin -X MKCOL "$DAV/vtr-test/sub" -o /dev/null
 dav_to COPY vtr-test/sample.mp4 vtr-test/sub/a.mp4 >/dev/null
 check "copy of a folder" 201 "$(dav_to COPY vtr-test/sub vtr-test/sub2)"
 check "the video in the copied folder has the thumbnail" true "$(has_preview vtr-test/sub2/a.mp4)"
-# A folder bob shares with the admin lives in bob's storage: moving there gives the video a new ID
-bob_body -X MKCOL "$NC_BASE/remote.php/dav/files/vtr-bob/drop" -o /dev/null
-bob_body -X POST "$NC_BASE/ocs/v2.php/apps/files_sharing/api/v1/shares" -d path=/drop -d shareType=0 -d shareWith="$NC_ADMIN" -d permissions=31 -o /dev/null
+# Moves need no help: Nextcloud keeps the file ID even across storages. Guards that assumption.
+occ app:enable files_external >/dev/null
+ext_id="$(occ files_external:create /vtr-ext local null::null -c datadir=/tmp | grep -oE '[0-9]+' | tail -1)"
 old_id="$(file_id vtr-test/copy.mp4)"
-check "move into a folder shared by someone else" 201 "$(dav_to MOVE vtr-test/copy.mp4 drop/moved.mp4)"
-check "the move gave the video a new ID" 1 "$([[ "$(file_id drop/moved.mp4)" != "$old_id" ]] && echo 1 || echo 0)"
-check "the moved video has the thumbnail" true "$(has_preview drop/moved.mp4)"
+check "move to an external storage" 201 "$(dav_to MOVE vtr-test/copy.mp4 vtr-ext/moved.mp4)"
+check "the move to another storage kept the file ID" "$old_id" "$(file_id vtr-ext/moved.mp4)"
+check "the moved video has the thumbnail" true "$(has_preview vtr-ext/moved.mp4)"
+admin -X DELETE "$DAV/vtr-ext/moved.mp4" -o /dev/null
+occ files_external:delete -y "$ext_id" >/dev/null
 admin -X DELETE "$NC_BASE/ocs/v2.php/cloud/users/vtr-bob" -o /dev/null
 
 echo "== orphan cleanup job"

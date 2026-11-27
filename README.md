@@ -16,7 +16,7 @@ There are two parts:
 - Under **Personal settings → Clientside Video Thumbnails → Automatically generate video thumbnails**, each account can allow it only on Wi-Fi or Ethernet and only while charging. The switches apply on all devices of the account. Browsers that can't tell their network type or battery state (Safari, Firefox) render anyway.
 - On mobile: if the browser ignores `preload` (iOS Safari), the script briefly starts muted playback to get the video loading. Before drawing it waits for the decoded frame (`requestVideoFrameCallback`), so mobile browsers don't hand out a black image.
 - Videos the browser can't decode (often HEVC, MKV, AVI, depending on browser) are remembered in `localStorage` and not retried for 30 days. They stay without a preview, unless another browser can play them. Silversong88's [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs_relay) has an FFmpeg worker for such videos.
-- Copies of a video, and videos moved to another storage (which gives them a new file ID), take their thumbnail along, also inside copied or moved folders.
+- Copies of a video take its thumbnail along, also inside copied folders. Moved videos keep theirs anyway: Nextcloud keeps the file ID, even across storages.
 - To switch it off in one browser: `localStorage.setItem('clientside_video_thumbnails.disabled', '1')` in the developer console.
 
 It relies on markup that is the same in Nextcloud 31 to 34: list rows carry `data-cy-files-list-row-fileid` and `-name`, and a file without a server preview shows an image from `/core/mimeicon`.
