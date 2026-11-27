@@ -122,12 +122,23 @@
 			failures.classList.add('hidden')
 			setRunning(true)
 
-			// Keep a phone from going to sleep while it works; not every browser allows it
+			// Keep a phone from going to sleep while it works. The browser drops the lock whenever the
+			// page is hidden (tab switch, screen off), so take it again when the page comes back.
 			let wakeLock = null
-			try {
-				wakeLock = await navigator.wakeLock?.request('screen')
-			} catch {
+			const lockScreen = async () => {
+				try {
+					wakeLock = await navigator.wakeLock?.request('screen')
+				} catch {
+					// Not supported, or refused (battery saver): run anyway
+				}
 			}
+			const relock = () => {
+				if (document.visibilityState === 'visible') {
+					lockScreen()
+				}
+			}
+			await lockScreen()
+			document.addEventListener('visibilitychange', relock)
 
 			try {
 				status.textContent = translate('Searching for videos…')
@@ -186,6 +197,7 @@
 			} catch (e) {
 				status.textContent = e.message
 			} finally {
+				document.removeEventListener('visibilitychange', relock)
 				wakeLock?.release().catch(() => {})
 				setRunning(false)
 			}
