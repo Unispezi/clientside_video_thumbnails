@@ -7,9 +7,9 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\VideoThumbsRelay\Controller;
+namespace OCA\ClientsideVideoThumbnails\Controller;
 
-use OCA\VideoThumbsRelay\Service\SecretService;
+use OCA\ClientsideVideoThumbnails\Service\SecretService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;

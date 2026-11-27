@@ -7,10 +7,10 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\VideoThumbsRelay\Controller;
+namespace OCA\ClientsideVideoThumbnails\Controller;
 
-use OCA\VideoThumbsRelay\Service\SecretService;
-use OCA\VideoThumbsRelay\Service\ThumbnailStore;
+use OCA\ClientsideVideoThumbnails\Service\SecretService;
+use OCA\ClientsideVideoThumbnails\Service\ThumbnailStore;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\BruteForceProtection;
@@ -42,7 +42,7 @@ class ThumbnailController extends Controller {
 
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[BruteForceProtection(action: 'video_thumbs_relay_secret')]
+	#[BruteForceProtection(action: 'clientside_video_thumbnails_secret')]
 	public function upload(string $path): JSONResponse {
 		if (!$this->secretOk()) {
 			return $this->invalidSecret();
@@ -87,7 +87,7 @@ class ThumbnailController extends Controller {
 
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[BruteForceProtection(action: 'video_thumbs_relay_secret')]
+	#[BruteForceProtection(action: 'clientside_video_thumbnails_secret')]
 	public function exists(string $path): JSONResponse {
 		if (!$this->secretOk()) {
 			return $this->invalidSecret();
@@ -101,7 +101,7 @@ class ThumbnailController extends Controller {
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[BruteForceProtection(action: 'video_thumbs_relay_secret')]
+	#[BruteForceProtection(action: 'clientside_video_thumbnails_secret')]
 	public function batchExists(array $paths = []): JSONResponse {
 		if (!$this->secretOk()) {
 			return $this->invalidSecret();
@@ -125,7 +125,7 @@ class ThumbnailController extends Controller {
 	 * Admin only: removes every stored thumbnail.
 	 */
 	#[NoCSRFRequired]
-	#[BruteForceProtection(action: 'video_thumbs_relay_secret')]
+	#[BruteForceProtection(action: 'clientside_video_thumbnails_secret')]
 	public function deleteAll(): JSONResponse {
 		if (!$this->secretOk()) {
 			return $this->invalidSecret();
@@ -134,13 +134,18 @@ class ThumbnailController extends Controller {
 		return new JSONResponse(['status' => 'success', 'message' => 'All thumbnails deleted']);
 	}
 
+	/**
+	 * The worker proves itself with the secret header. A signed-in browser session with a valid
+	 * request token (the Files app script) needs no secret.
+	 */
 	private function secretOk(): bool {
-		return $this->secret->verify($this->request->getHeader(SecretService::HEADER));
+		return $this->request->passesCSRFCheck()
+			|| $this->secret->verify($this->request->getHeader(SecretService::HEADER));
 	}
 
 	private function invalidSecret(): JSONResponse {
 		$response = $this->error('Invalid secret', Http::STATUS_UNAUTHORIZED);
-		$response->throttle(['action' => 'video_thumbs_relay_secret']);
+		$response->throttle(['action' => 'clientside_video_thumbnails_secret']);
 		return $response;
 	}
 

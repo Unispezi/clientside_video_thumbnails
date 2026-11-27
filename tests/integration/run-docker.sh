@@ -23,7 +23,7 @@ docker rm -f "$NAME" >/dev/null 2>&1 || true
 docker run -d --name "$NAME" -p "127.0.0.1:$PORT:80" \
 	-e SQLITE_DATABASE=nc -e NEXTCLOUD_ADMIN_USER=admin -e NEXTCLOUD_ADMIN_PASSWORD="$PASS" \
 	-e NEXTCLOUD_TRUSTED_DOMAINS=localhost \
-	-v "$APP_DIR:/opt/video_thumbs_relay:ro" \
+	-v "$APP_DIR:/opt/clientside_video_thumbnails:ro" \
 	"nextcloud:$VERSION-apache" >/dev/null
 
 echo "Waiting for Nextcloud $VERSION on port $PORT..."
@@ -36,20 +36,20 @@ done
 curl -sf "http://localhost:$PORT/status.php" | grep -q '"installed":true' || { docker logs "$NAME" | tail -30; exit 1; }
 
 # Copied in after install: mounting into custom_apps makes it root-owned, which breaks the installer on Nextcloud 31
-docker exec "$NAME" sh -c 'mkdir -p /var/www/html/custom_apps/video_thumbs_relay &&
-	tar -C /opt/video_thumbs_relay --exclude=./vendor --exclude=./worker --exclude=./tests --exclude=./.git -cf - . |
-	tar -C /var/www/html/custom_apps/video_thumbs_relay -xf - &&
+docker exec "$NAME" sh -c 'mkdir -p /var/www/html/custom_apps/clientside_video_thumbnails &&
+	tar -C /opt/clientside_video_thumbnails --exclude=./vendor --exclude=./worker --exclude=./tests --exclude=./.git -cf - . |
+	tar -C /var/www/html/custom_apps/clientside_video_thumbnails -xf - &&
 	chown -R www-data:www-data /var/www/html/custom_apps'
 
 OCC="docker exec -u www-data $NAME php occ"
-$OCC app:enable video_thumbs_relay
+$OCC app:enable clientside_video_thumbnails
 $OCC app:disable firstrunwizard >/dev/null 2>&1 || true
 
 # The web server's route and capability caches only pick up an app enabled via occ after a short delay
 echo "Waiting for the app's routes..."
 for _ in $(seq 1 60); do
-	if curl -s -u "admin:$PASS" -H 'OCS-APIRequest: true' "http://localhost:$PORT/index.php/apps/video_thumbs_relay/thumbnail/exists?path=/x" | grep -q '"exists"' &&
-		curl -s -u "admin:$PASS" -H 'OCS-APIRequest: true' "http://localhost:$PORT/ocs/v2.php/cloud/capabilities?format=json" | grep -q '"video_thumbs_relay"'; then
+	if curl -s -u "admin:$PASS" -H 'OCS-APIRequest: true' "http://localhost:$PORT/index.php/apps/clientside_video_thumbnails/thumbnail/exists?path=/x" | grep -q '"exists"' &&
+		curl -s -u "admin:$PASS" -H 'OCS-APIRequest: true' "http://localhost:$PORT/ocs/v2.php/cloud/capabilities?format=json" | grep -q '"clientside_video_thumbnails"'; then
 		break
 	fi
 	sleep 2
@@ -57,10 +57,10 @@ done
 
 NC_BASE="http://localhost:$PORT" NC_ADMIN=admin NC_PASS="$PASS" OCC="$OCC" "$HERE/smoke.sh"
 
-errors="$(docker exec "$NAME" sh -c 'cat data/nextcloud.log 2>/dev/null' | grep -c '"app":"video_thumbs_relay"\|video_thumbs_relay/lib' || true)"
+errors="$(docker exec "$NAME" sh -c 'cat data/nextcloud.log 2>/dev/null' | grep -c '"app":"clientside_video_thumbnails"\|clientside_video_thumbnails/lib' || true)"
 if [[ "$errors" != 0 ]]; then
 	echo "Nextcloud log has $errors entries mentioning the app:"
-	docker exec "$NAME" sh -c 'cat data/nextcloud.log' | grep 'video_thumbs_relay' | tail -5
+	docker exec "$NAME" sh -c 'cat data/nextcloud.log' | grep 'clientside_video_thumbnails' | tail -5
 	exit 1
 fi
 echo "Nextcloud log: no entries from the app"

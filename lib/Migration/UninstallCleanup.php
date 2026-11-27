@@ -7,10 +7,10 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\VideoThumbsRelay\Migration;
+namespace OCA\ClientsideVideoThumbnails\Migration;
 
-use OCA\VideoThumbsRelay\AppInfo\Application;
-use OCA\VideoThumbsRelay\Service\ThumbnailStore;
+use OCA\ClientsideVideoThumbnails\AppInfo\Application;
+use OCA\ClientsideVideoThumbnails\Service\ThumbnailStore;
 use OCP\IAppConfig;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
@@ -26,7 +26,7 @@ class UninstallCleanup implements IRepairStep {
 	}
 
 	public function getName(): string {
-		return 'Remove Video Thumbnail Relay thumbnails and settings';
+		return 'Remove Clientside Video Thumbnails thumbnails and settings';
 	}
 
 	public function run(IOutput $output): void {

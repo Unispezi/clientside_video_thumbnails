@@ -1,7 +1,7 @@
 {
-  "name": "video-thumbs-relay-worker",
+  "name": "clientside-video-thumbnails-worker",
   "version": "1.0.0",
-  "description": "Local FFmpeg worker for the Video Thumbnail Relay Nextcloud app. https://github.com/silversong88/video_thumbs_relay",
+  "description": "Local FFmpeg worker for the Clientside Video Thumbnails Nextcloud app. https://github.com/Unispezi/clientside_video_thumbnails",
   "main": "index.js",
   "type": "module",
   "scripts": {

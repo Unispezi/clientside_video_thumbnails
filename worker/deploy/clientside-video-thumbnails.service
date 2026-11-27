@@ -1,6 +1,6 @@
 [Unit]
-Description=Video Thumbnail Relay worker
-Documentation=https://github.com/silversong88/video_thumbs_relay
+Description=Clientside Video Thumbnails worker
+Documentation=https://github.com/silversong88/clientside_video_thumbnails
 Wants=network-online.target
 After=network-online.target
 
@@ -8,14 +8,14 @@ After=network-online.target
 Type=oneshot
 User=vtrelay
 Group=vtrelay
-ExecStart=/opt/video-thumbs-relay/bin/node /opt/video-thumbs-relay/index.js --env /etc/video-thumbs-relay/worker.env
-WorkingDirectory=/var/lib/video-thumbs-relay
+ExecStart=/opt/clientside-video-thumbnails/bin/node /opt/clientside-video-thumbnails/index.js --env /etc/clientside-video-thumbnails/worker.env
+WorkingDirectory=/var/lib/clientside-video-thumbnails
 # Paths set here win over the env file (dotenv never overrides existing variables)
-Environment=TEMP_DIR=/var/lib/video-thumbs-relay/tmp
-Environment=FOLDER_CACHE=/var/lib/video-thumbs-relay/folder_cache.csv
-Environment=THUMB_CACHE=/var/lib/video-thumbs-relay/thumb_cache.csv
-Environment=FAIL_CACHE=/var/lib/video-thumbs-relay/fail_cache.csv
-StateDirectory=video-thumbs-relay
+Environment=TEMP_DIR=/var/lib/clientside-video-thumbnails/tmp
+Environment=FOLDER_CACHE=/var/lib/clientside-video-thumbnails/folder_cache.csv
+Environment=THUMB_CACHE=/var/lib/clientside-video-thumbnails/thumb_cache.csv
+Environment=FAIL_CACHE=/var/lib/clientside-video-thumbnails/fail_cache.csv
+StateDirectory=clientside-video-thumbnails
 StateDirectoryMode=0750
 UMask=0027
 Nice=10

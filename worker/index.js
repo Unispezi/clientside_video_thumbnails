@@ -75,7 +75,7 @@ const HELP_MODE = process.argv.includes("--help") || process.argv.includes("-h")
 
 if (HELP_MODE) {
     console.log(`
-🖼️  Video Thumbnail Relay worker - Usage Guide
+🖼️  Clientside Video Thumbnails worker - Usage Guide
 
 Commands:
   node index.js                      Run a standard scan and upload missing thumbnails.
@@ -115,7 +115,7 @@ if (DELETE_ALL_MODE) {
 const urlObj = new URL(NC_URL);
 const BASE_URL = `${urlObj.protocol}//${urlObj.host}`;
 const NC_ROOT = NC_URL.split('/remote.php')[0];
-const APP_ID = "video_thumbs_relay";
+const APP_ID = "clientside_video_thumbnails";
 const API_BASE = `${NC_ROOT}/index.php/apps/${APP_ID}/thumbnail`;
 const DAV_PATH_PREFIX = urlObj.pathname;
 const MAX_SIZE_BYTES = (parseInt(MAX_VIDEO_SIZE_MB) || 3000) * 1024 * 1024;
@@ -150,7 +150,7 @@ const client = axios.create({
     auth: { username: NC_USER, password: NC_PASS },
     headers: { 
         'OCS-APIRequest': 'true',
-        'X-VideoThumbsRelay-Secret': SECRET
+        'X-ClientsideVideoThumbnails-Secret': SECRET
     },
     maxBodyLength: Infinity,
     maxContentLength: Infinity,

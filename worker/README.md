@@ -1,12 +1,12 @@
-# Video Thumbnail Relay worker
+# Clientside Video Thumbnails worker
 
-This worker renders video thumbnails on your own machine and uploads them to the **Video Thumbnail Relay** Nextcloud app.
+This worker renders video thumbnails on your own machine and uploads them to the **Clientside Video Thumbnails** Nextcloud app.
 
 ## Requirements
 
 - Node.js 18 or newer.
 - `ffmpeg` and `ffprobe` on your `PATH`. On Debian or Ubuntu, run `sudo apt install ffmpeg`.
-- The Video Thumbnail Relay app enabled on your Nextcloud.
+- The Clientside Video Thumbnails app enabled on your Nextcloud.
 
 ## Setup
 
@@ -18,7 +18,7 @@ node index.js
 ```
 
 - `NC_PASS`: create an app password under **Personal settings → Security → Devices & sessions**. Don't use your login password.
-- `NC_SECRET`: generate one under **Administration settings → Additional settings → Video Thumbnail Relay**.
+- `NC_SECRET`: generate one under **Administration settings → Additional settings → Clientside Video Thumbnails**.
 
 ## Usage
 
@@ -43,23 +43,23 @@ FFmpeg jobs run one at a time, while downloads run in parallel (`IO_CONCURRENCY`
 
 ```sh
 sudo NODE="$(command -v node)" deploy/install.sh
-sudoedit /etc/video-thumbs-relay/worker.env    # first install only
+sudoedit /etc/clientside-video-thumbnails/worker.env    # first install only
 ```
 
 | Path | Contents |
 | --- | --- |
-| `/opt/video-thumbs-relay` | Worker code, its dependencies and a copy of Node.js. Owned by root. |
-| `/etc/video-thumbs-relay/worker.env` | Connection settings. Mode `0640 root:vtrelay`. |
-| `/var/lib/video-thumbs-relay` | Caches and temporary files. |
+| `/opt/clientside-video-thumbnails` | Worker code, its dependencies and a copy of Node.js. Owned by root. |
+| `/etc/clientside-video-thumbnails/worker.env` | Connection settings. Mode `0640 root:vtrelay`. |
+| `/var/lib/clientside-video-thumbnails` | Caches and temporary files. |
 
 The service runs as the unprivileged system user `vtrelay`, which can't read home directories or write outside its state directory. The unit sets the cache and temp paths itself, so leave them out of `worker.env`.
 
 Re-run the same `install.sh` command to update the worker. Your config and caches are kept.
 
 ```sh
-systemctl list-timers video-thumbs-relay.timer   # next run
-journalctl -u video-thumbs-relay.service -f      # live log
-sudo systemctl start video-thumbs-relay.service  # run now
+systemctl list-timers clientside-video-thumbnails.timer   # next run
+journalctl -u clientside-video-thumbnails.service -f      # live log
+sudo systemctl start clientside-video-thumbnails.service  # run now
 ```
 
 ## Known limitations

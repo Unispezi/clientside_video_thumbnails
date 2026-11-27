@@ -5,10 +5,10 @@
 (function() {
 	'use strict'
 
-	const translate = (text, vars) => (typeof window.t === 'function' ? window.t('video_thumbs_relay', text, vars) : text.replace(/{(\w+)}/g, (m, k) => (vars && k in vars ? vars[k] : m)))
+	const translate = (text, vars) => (typeof window.t === 'function' ? window.t('clientside_video_thumbnails', text, vars) : text.replace(/{(\w+)}/g, (m, k) => (vars && k in vars ? vars[k] : m)))
 
 	function init() {
-		const root = document.getElementById('video-thumbs-relay-admin')
+		const root = document.getElementById('clientside-video-thumbnails-admin')
 		if (!root) {
 			return
 		}
@@ -39,7 +39,7 @@
 				box.classList.remove('hidden')
 				value.select()
 				clear.disabled = false
-				status.textContent = translate('A secret is set. Requests without it are rejected.')
+				status.textContent = translate('A secret is set. API requests without it are rejected, except from signed-in browser sessions.')
 			} catch (e) {
 				message.textContent = e.message
 			}
@@ -51,7 +51,7 @@
 				box.classList.add('hidden')
 				value.value = ''
 				clear.disabled = true
-				status.textContent = translate('No secret is set. Any signed-in user can upload thumbnails for their own videos.')
+				status.textContent = translate('No secret is set. Any signed-in user or app password can upload thumbnails for their own videos.')
 			} catch (e) {
 				message.textContent = e.message
 			}

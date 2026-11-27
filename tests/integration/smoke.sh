@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2026 silversong88
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# End-to-end checks against a running Nextcloud with video_thumbs_relay enabled.
+# End-to-end checks against a running Nextcloud with clientside_video_thumbnails enabled.
 #
 # Required environment:
 #   NC_BASE    e.g. http://localhost:8080
@@ -17,7 +17,7 @@ set -euo pipefail
 : "${NC_BASE:?}" "${NC_ADMIN:?}" "${NC_PASS:?}" "${OCC:?}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 FIX="$HERE/fixtures"
-APP=video_thumbs_relay
+APP=clientside_video_thumbnails
 API="$NC_BASE/index.php/apps/$APP/thumbnail"
 DAV="$NC_BASE/remote.php/dav/files/$NC_ADMIN"
 TMP="$(mktemp -d)"
@@ -78,7 +78,23 @@ echo "== secret"
 secret="$(admin -X POST "$NC_BASE/index.php/apps/$APP/settings/secret" | sed -E 's/.*"secret":"([^"]+)".*/\1/')"
 check "secret generated" 48 "${#secret}"
 check "request without secret rejected" 401 "$(code "$API/exists?path=/vtr-test/sample.mp4")"
-check "request with secret accepted" 200 "$(code -H "X-VideoThumbsRelay-Secret: $secret" "$API/exists?path=/vtr-test/sample.mp4")"
+check "request with secret accepted" 200 "$(code -H "X-ClientsideVideoThumbnails-Secret: $secret" "$API/exists?path=/vtr-test/sample.mp4")"
+
+echo "== browser session (Files app script)"
+jar="$TMP/cookies"
+login_token="$(curl -s -c "$jar" -b "$jar" "$NC_BASE/index.php/login" | grep -oE 'data-requesttoken="[^"]+"' | head -1 | cut -d'"' -f2)"
+curl -s -c "$jar" -b "$jar" -o /dev/null -X POST "$NC_BASE/index.php/login" \
+	--data-urlencode "user=$NC_ADMIN" --data-urlencode "password=$NC_PASS" --data-urlencode "requesttoken=$login_token"
+session_token="$(curl -s -b "$jar" "$NC_BASE/index.php/csrftoken" | sed -E 's/.*"token":"([^"]+)".*/\1/')"
+browser() { curl -s -b "$jar" -o "$TMP/last-body" -w '%{http_code}' "$@"; }
+check "Files app loads the browser script" 1 \
+	"$(curl -s -b "$jar" "$NC_BASE/index.php/apps/files/" | grep -q "$APP/js/files-thumbs" && echo 1 || echo 0)"
+check "session upload without secret but with request token accepted" 200 \
+	"$(browser -H "requesttoken: $session_token" -F path=/vtr-test/sample.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload")"
+check "session upload without request token rejected" 401 \
+	"$(browser -F path=/vtr-test/sample.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload")"
+occ security:bruteforce:reset 127.0.0.1 >/dev/null 2>&1 || true
+
 check "secret removed" 200 "$(code -X DELETE "$NC_BASE/index.php/apps/$APP/settings/secret")"
 occ security:bruteforce:reset 127.0.0.1 >/dev/null 2>&1 || true
 check "request without secret accepted again" 200 "$(code "$API/exists?path=/vtr-test/sample.mp4")"
@@ -93,7 +109,7 @@ check "non-admin cannot upload for admin's file" 404 "$(bob -F path=/vtr-test/sa
 admin -X DELETE "$NC_BASE/ocs/v2.php/cloud/users/vtr-bob" -o /dev/null
 
 echo "== orphan cleanup job"
-job="$(occ background-job:list --class='OCA\VideoThumbsRelay\BackgroundJob\CleanupOrphans' --output=json | grep -oE '"id":"?[0-9]+' | head -1 | grep -oE '[0-9]+$')"
+job="$(occ background-job:list --class='OCA\ClientsideVideoThumbnails\BackgroundJob\CleanupOrphans' --output=json | grep -oE '"id":"?[0-9]+' | head -1 | grep -oE '[0-9]+$')"
 check "cleanup job registered" 1 "$([[ -n "$job" ]] && echo 1 || echo 0)"
 admin -T "$FIX/sample.mp4" "$DAV/vtr-test/doomed.mp4" -o /dev/null
 check "thumbnail for doomed.mp4 stored" 200 "$(code -F path=/vtr-test/doomed.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload")"

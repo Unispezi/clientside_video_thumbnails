@@ -1,52 +1,54 @@
 <?xml version="1.0"?>
 <info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
-    <id>video_thumbs_relay</id>
-    <name>Video Thumbnail Relay</name>
-    <summary>Video previews for hosts without FFmpeg, rendered by a worker you run</summary>
-    <description><![CDATA[Many managed and shared hosts don't ship FFmpeg, so Nextcloud can't create previews for video files. Video Thumbnail Relay moves that work to a machine you control.
+    <id>clientside_video_thumbnails</id>
+    <name>Clientside Video Thumbnails</name>
+    <summary>Video previews for hosts without FFmpeg, rendered in your browser</summary>
+    <description><![CDATA[Many managed and shared hosts don't ship FFmpeg, so Nextcloud can't create previews for video files. Clientside Video Thumbnails lets your browser do that work instead.
 
 **How it works**
 
-1. A small Node.js worker runs on your own computer or server. It scans your files over WebDAV, renders one frame from each video with FFmpeg, and uploads it as a JPEG.
-2. This app stores those thumbnails and serves them as native Nextcloud previews for video files. You see them in Files, Photos and shares.
+1. When you open a folder in Files, your browser looks for videos without a preview among the files on screen.
+2. For each of them it loads just enough of the video to grab one frame, shows it right away and uploads it as a JPEG.
+3. This app stores those thumbnails and serves them as native Nextcloud previews from then on. You see them in Files, Photos, shares and the mobile apps.
+
+Your browser can only render videos it can play. Depending on the browser, HEVC, MKV or AVI files may stay without a preview. For those, an optional Node.js worker with FFmpeg can run on a machine you control; see the repository's `worker/` folder.
 
 **Features**
 
-- Uses only the public Nextcloud API. No FFmpeg is needed on the server.
-- Protects the upload API with an optional shared secret, set in **Administration settings → Additional settings**.
+- Uses only the public Nextcloud API. No FFmpeg is needed on the server, and no extra machine.
 - Accepts only JPEG images up to 5 MB, and only for video files the uploading user can access.
+- Protects the worker API with an optional shared secret, set in **Administration settings → Additional settings**.
 - Deletes thumbnails automatically when their video is permanently deleted, and deletes all stored data when the app is uninstalled.
 
 **Privacy**
 
-The app sends no data to third parties. Thumbnails are uploaded by your own worker, using your own Nextcloud credentials.
+The app sends no data to third parties. Videos are read and thumbnails uploaded by your own browser or worker, with your own Nextcloud login.
 
-The worker and setup instructions are in the repository's `worker/` folder.
-
-This app is a fork of [localthumbs](https://github.com/hersche/nc-local-thumbnailer) by Vinzenz Hersche.]]></description>
-    <version>1.0.0</version>
+This app is a fork of [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs_relay) by silversong88, which in turn is a fork of [localthumbs](https://github.com/hersche/nc-local-thumbnailer) by Vinzenz Hersche.]]></description>
+    <version>1.1.0</version>
     <licence>AGPL-3.0-or-later</licence>
+    <author homepage="https://github.com/Unispezi">Unispezi</author>
     <author mail="silversong.88@gmail.com" homepage="https://github.com/silversong88">silversong88</author>
     <author homepage="https://github.com/hersche">Vinzenz Hersche</author>
-    <namespace>VideoThumbsRelay</namespace>
+    <namespace>ClientsideVideoThumbnails</namespace>
     <category>multimedia</category>
-    <website>https://github.com/silversong88/video_thumbs_relay</website>
-    <bugs>https://github.com/silversong88/video_thumbs_relay/issues</bugs>
-    <repository type="git">https://github.com/silversong88/video_thumbs_relay.git</repository>
+    <website>https://github.com/Unispezi/clientside_video_thumbnails</website>
+    <bugs>https://github.com/Unispezi/clientside_video_thumbnails/issues</bugs>
+    <repository type="git">https://github.com/Unispezi/clientside_video_thumbnails.git</repository>
     <dependencies>
         <php min-version="8.2" max-version="8.5"/>
-        <nextcloud min-version="31" max-version="33"/>
+        <nextcloud min-version="31" max-version="34"/>
     </dependencies>
     <background-jobs>
-        <job>OCA\VideoThumbsRelay\BackgroundJob\CleanupOrphans</job>
+        <job>OCA\ClientsideVideoThumbnails\BackgroundJob\CleanupOrphans</job>
     </background-jobs>
     <repair-steps>
         <uninstall>
-            <step>OCA\VideoThumbsRelay\Migration\UninstallCleanup</step>
+            <step>OCA\ClientsideVideoThumbnails\Migration\UninstallCleanup</step>
         </uninstall>
     </repair-steps>
     <settings>
-        <admin>OCA\VideoThumbsRelay\Settings\Admin</admin>
+        <admin>OCA\ClientsideVideoThumbnails\Settings\Admin</admin>
     </settings>
 </info>

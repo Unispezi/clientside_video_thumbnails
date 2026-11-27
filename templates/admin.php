@@ -7,10 +7,10 @@
  * @var \OCP\IL10N $l
  */
 ?>
-<div id="video-thumbs-relay-admin" class="section" data-secret-url="<?php p($_['secretUrl']); ?>">
-	<h2><?php p($l->t('Video Thumbnail Relay')); ?></h2>
+<div id="clientside-video-thumbnails-admin" class="section" data-secret-url="<?php p($_['secretUrl']); ?>">
+	<h2><?php p($l->t('Clientside Video Thumbnails')); ?></h2>
 	<p class="settings-hint">
-		<?php p($l->t('Video previews are rendered by a worker on your own machine, which uploads them to this server. Set the same secret in the worker\'s NC_SECRET setting so only your worker can upload thumbnails.')); ?>
+		<?php p($l->t('Video previews are rendered in the browser of whoever opens a folder in Files, and uploaded to this server. Videos the browser can\'t play can be handled by an optional worker on your own machine. Set the same secret in the worker\'s NC_SECRET setting so that, apart from signed-in browser sessions, only your worker can upload thumbnails.')); ?>
 	</p>
 
 	<p>
@@ -20,9 +20,9 @@
 
 	<p id="vtr-status">
 		<?php if ($_['secretSet']): ?>
-			<?php p($l->t('A secret is set. Requests without it are rejected.')); ?>
+			<?php p($l->t('A secret is set. API requests without it are rejected, except from signed-in browser sessions.')); ?>
 		<?php else: ?>
-			<?php p($l->t('No secret is set. Any signed-in user can upload thumbnails for their own videos.')); ?>
+			<?php p($l->t('No secret is set. Any signed-in user or app password can upload thumbnails for their own videos.')); ?>
 		<?php endif; ?>
 	</p>
 

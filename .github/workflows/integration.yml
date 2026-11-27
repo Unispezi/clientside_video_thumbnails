@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nextcloud: ['31', '32', '33']
+        nextcloud: ['31', '32', '33', '34']
 
     name: Nextcloud ${{ matrix.nextcloud }}
 

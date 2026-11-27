@@ -7,9 +7,9 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\VideoThumbsRelay\Preview;
+namespace OCA\ClientsideVideoThumbnails\Preview;
 
-use OCA\VideoThumbsRelay\Service\ThumbnailStore;
+use OCA\ClientsideVideoThumbnails\Service\ThumbnailStore;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\IImage;

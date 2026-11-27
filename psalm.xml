@@ -22,6 +22,7 @@
 	</projectFiles>
 	<extraFiles>
 		<directory name="vendor/nextcloud/ocp" />
+		<directory name="tests/stubs" />
 	</extraFiles>
 	<issueHandlers>
 		<!-- #[\Override] needs PHP 8.3; the app supports 8.2 -->

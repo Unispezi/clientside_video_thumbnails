@@ -1,11 +1,11 @@
 {
-	"name": "silversong88/video_thumbs_relay",
+	"name": "unispezi/clientside_video_thumbnails",
 	"description": "Video previews for Nextcloud hosts without FFmpeg",
 	"type": "project",
 	"license": "AGPL-3.0-or-later",
 	"autoload": {
 		"psr-4": {
-			"OCA\\VideoThumbsRelay\\": "lib/"
+			"OCA\\ClientsideVideoThumbnails\\": "lib/"
 		}
 	},
 	"require": {
