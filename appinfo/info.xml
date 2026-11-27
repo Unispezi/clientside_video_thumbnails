@@ -50,5 +50,7 @@ This app is a fork of [Video Thumbnail Relay](https://github.com/silversong88/vi
     </repair-steps>
     <settings>
         <admin>OCA\ClientsideVideoThumbnails\Settings\Admin</admin>
+        <personal>OCA\ClientsideVideoThumbnails\Settings\Personal</personal>
+        <personal-section>OCA\ClientsideVideoThumbnails\Settings\PersonalSection</personal-section>
     </settings>
 </info>

@@ -9,12 +9,13 @@ Forked from [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs
 
 ### Added
 - The Files app renders previews for videos on screen that have none, right in the browser, shows them at once and uploads them. No worker is needed for videos the browser can play.
+- A find-and-fix mode in the personal settings: finds all videos without a preview and renders them in the browser, with progress and a list of failures.
 - Support for Nextcloud 34.
 - Mobile browsers: muted playback kick-off when iOS Safari ignores `preload`, waiting for the decoded frame before drawing, and no rendering while the data saver is on.
 
 ### Changed
 - New app ID `clientside_video_thumbnails`, API path `/apps/clientside_video_thumbnails/thumbnail/…` and secret header `X-ClientsideVideoThumbnails-Secret`.
-- Signed-in browser sessions with a valid request token can use the API without the secret.
+- Browser sessions signed in through the login page can use the API without the secret, as long as they pass the CSRF check. Clients with an Authorization header, such as the worker, still need it.
 
 ## 1.0.0 - 2026-10-12
 

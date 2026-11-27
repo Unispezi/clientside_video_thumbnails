@@ -97,6 +97,14 @@ check "Files app loads the browser script" 1 \
 	"$(curl -s -b "$jar" "$NC_BASE/index.php/apps/files/" | grep -q "$APP/js/files-thumbs" && echo 1 || echo 0)"
 check "session upload without secret but with request token accepted" 200 \
 	"$(browser -H "requesttoken: $session_token" -F path=/vtr-test/sample.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload")"
+check "personal settings page loads the find-and-fix script" 1 \
+	"$(curl -s -b "$jar" "$NC_BASE/index.php/settings/user/$APP" | grep -q "$APP/js/personal" && echo 1 || echo 0)"
+# Same query as js/personal.js
+search_body='<?xml version="1.0" encoding="UTF-8"?><d:searchrequest xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns"><d:basicsearch><d:select><d:prop><oc:fileid/><nc:has-preview/></d:prop></d:select><d:from><d:scope><d:href>/files/'"$NC_ADMIN"'</d:href><d:depth>infinity</d:depth></d:scope></d:from><d:where><d:like><d:prop><d:getcontenttype/></d:prop><d:literal>video/%</d:literal></d:like></d:where><d:orderby/></d:basicsearch></d:searchrequest>'
+search_out="$(curl -s -b "$jar" -X SEARCH -H "requesttoken: $session_token" -H 'Content-Type: text/xml; charset=utf-8' --data "$search_body" "$NC_BASE/remote.php/dav/")"
+check "video search finds sample.mp4 with preview" 1 \
+	"$(grep -q 'vtr-test/sample.mp4' <<<"$search_out" && grep -q '<nc:has-preview>true' <<<"$search_out" && echo 1 || echo 0)"
+check "video search leaves out other files" 0 "$(grep -c 'notes.txt' <<<"$search_out" || true)"
 check "session upload without request token rejected" 401 \
 	"$(browser -F path=/vtr-test/sample.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload")"
 occ security:bruteforce:reset 127.0.0.1 >/dev/null 2>&1 || true

@@ -25,6 +25,7 @@ class LoadFilesScript implements IEventListener {
 		if (!$event instanceof LoadAdditionalScriptsEvent) {
 			return;
 		}
+		Util::addScript(Application::APP_ID, 'core');
 		Util::addScript(Application::APP_ID, 'files-thumbs');
 	}
 }

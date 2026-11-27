@@ -5,7 +5,7 @@ Video previews for Nextcloud instances that can't run FFmpeg themselves, such as
 There are up to three parts:
 
 - **Nextcloud app** (`appinfo/`, `lib/`), app ID `clientside_video_thumbnails`. It adds an API that accepts thumbnails, and a preview provider that serves them as native previews for video files.
-- **Browser script** (`js/files-thumbs.js`), loaded by the app into the Files web interface. When a folder shows videos without a preview, the browser grabs one frame of each, shows it at once and uploads it. From then on the server serves it everywhere: Files, Photos, shares, mobile apps.
+- **Browser scripts** (`js/core.js`, `js/files-thumbs.js`, `js/personal.js`). `files-thumbs.js` is loaded by the app into the Files web interface. When a folder shows videos without a preview, the browser grabs one frame of each, shows it at once and uploads it. From then on the server serves it everywhere: Files, Photos, shares, mobile apps. `personal.js` is the find-and-fix mode described below.
 - **Worker** (`worker/`), optional. A Node.js script with FFmpeg that runs on a machine you control. It scans your files over WebDAV, so it also covers videos the browser can't play and folders nobody opens in the web interface.
 
 ## How the browser script works
@@ -18,6 +18,10 @@ There are up to three parts:
 - To switch it off in one browser: `localStorage.setItem('clientside_video_thumbnails.disabled', '1')` in the developer console.
 
 It relies on markup that is the same in Nextcloud 31 to 34: list rows carry `data-cy-files-list-row-fileid` and `-name`, and a file without a server preview shows an image from `/core/mimeicon`.
+
+## Find and fix mode
+
+Under **Personal settings → Video thumbnails → Find and fix videos without thumbnail**, one DAV search finds all your videos without a preview, in every folder. The page then renders and uploads a frame for each, one at a time, with progress and a list of the videos that failed. Keep the page open until it is done; on phones it asks the browser to keep the screen on. Tick **Also retry videos this browser could not render before** to ignore the failure cache, for example after switching to a browser with more codecs.
 
 ## Getting started
 

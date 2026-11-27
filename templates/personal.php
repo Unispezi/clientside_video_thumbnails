@@ -1,0 +1,31 @@
+<?php
+/**
+ * SPDX-FileCopyrightText: 2026 Unispezi
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ *
+ * @var \OCP\IL10N $l
+ */
+?>
+<div id="clientside-video-thumbnails-personal" class="section">
+	<h2><?php p($l->t('Find and fix videos without thumbnail')); ?></h2>
+	<p class="settings-hint">
+		<?php p($l->t('Searches all your files for videos without a preview and renders one in this browser. Keep this page open until it is done. Each video costs a few MB of data.')); ?>
+	</p>
+
+	<p>
+		<input id="cvt-retry" type="checkbox" class="checkbox">
+		<label for="cvt-retry"><?php p($l->t('Also retry videos this browser could not render before')); ?></label>
+	</p>
+
+	<button id="cvt-start" class="button primary" type="button"><?php p($l->t('Find and fix')); ?></button>
+	<button id="cvt-stop" class="button hidden" type="button"><?php p($l->t('Stop')); ?></button>
+
+	<p id="cvt-status" aria-live="polite"></p>
+	<progress id="cvt-progress" class="hidden" max="1" value="0"></progress>
+	<p id="cvt-current" class="cvt-current"></p>
+
+	<details id="cvt-failures" class="hidden">
+		<summary id="cvt-failures-title"></summary>
+		<ul id="cvt-failures-list"></ul>
+	</details>
+</div>

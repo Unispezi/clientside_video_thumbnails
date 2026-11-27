@@ -1,0 +1,19 @@
+/**
+ * SPDX-FileCopyrightText: 2026 Unispezi
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+#clientside-video-thumbnails-personal progress {
+	width: min(100%, 520px);
+	display: block;
+}
+
+#clientside-video-thumbnails-personal .cvt-current {
+	color: var(--color-text-maxcontrast);
+	overflow-wrap: anywhere;
+}
+
+#clientside-video-thumbnails-personal #cvt-failures-list {
+	list-style: disc;
+	padding-inline-start: 20px;
+	overflow-wrap: anywhere;
+}
