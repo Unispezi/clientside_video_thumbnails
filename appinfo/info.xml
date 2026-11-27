@@ -12,13 +12,17 @@
 2. For each of them it loads just enough of the video to grab one frame, shows it right away and uploads it as a JPEG.
 3. This app stores those thumbnails and serves them as native Nextcloud previews from then on. You see them in Files, Photos, shares and the mobile apps.
 
-Your browser can only render videos it can play. Depending on the browser, HEVC, MKV or AVI files may stay without a preview.
+**All at once:** under **Personal settings → Clientside Video Thumbnails**, **Create missing thumbnails** renders every video without a preview in one go.
+
+**Limits**
+
+- Thumbnails are created in the web browser only, on the desktop or on the phone. The native Nextcloud apps, at least the one for Android, don't create any. They show the ones the browser made. On a phone, open Nextcloud in the mobile browser.
+- Your browser can only render videos it can play. Depending on the browser, HEVC, MKV or AVI files may stay without a preview.
 
 **Features**
 
-- Uses only the public Nextcloud API. No FFmpeg is needed on the server, and no extra machine.
+- No FFmpeg is needed on the server, and no extra machine.
 - Accepts only JPEG images up to 16 MB, and only for video files the uploading user can access.
-- Finds and fixes all of your videos without a preview at once, under **Personal settings → Clientside Video Thumbnails**.
 - Deletes thumbnails automatically when their video is permanently deleted, and deletes all stored data when the app is uninstalled.
 
 **Privacy**

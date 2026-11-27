@@ -9,6 +9,8 @@ There are two parts:
 - **Nextcloud app** (`appinfo/`, `lib/`), app ID `clientside_video_thumbnails`. It adds an endpoint that accepts thumbnails from signed-in browsers, and a preview provider that serves them as native previews for video files.
 - **Browser scripts** (`js/core.js`, `js/files-thumbs.js`, `js/personal.js`). `files-thumbs.js` is loaded by the app into the Files web interface. When a folder shows videos without a preview, the browser grabs one frame of each, shows it at once and uploads it. From then on the server serves it everywhere: Files, Photos, shares, mobile apps. `personal.js` is the find-and-fix mode described below.
 
+Only the web interface runs these scripts, in desktop and mobile browsers. The native Nextcloud apps, at least the one for Android, create no thumbnails; they show the ones the browser made.
+
 ## How the browser script works
 
 - It only looks at rows currently on screen in the "All files" view, one video at a time.

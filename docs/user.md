@@ -6,7 +6,11 @@
 
 Open a folder with videos in Files. Videos without a preview get one after a few seconds. Nothing to set up.
 
-This happens only in the browser, in the "All files" view, for the videos on screen. The Nextcloud apps for Android and iOS show the thumbnails, but don't create them.
+This happens only in the web browser, in the "All files" view, for the videos on screen.
+
+**On a phone, use the mobile browser, not the Nextcloud app.** The native apps, at least the one for Android, create no thumbnails. They show the ones your browser made.
+
+To create all missing thumbnails at once, see [Find and fix](#find-and-fix-videos-without-thumbnail) below.
 
 ## Settings
 
@@ -35,6 +39,9 @@ With the data saver on, nothing is rendered while you browse.
 Deletes the thumbnails of all your own videos. Videos others shared with you keep theirs. They are created again the next time a video is listed.
 
 ## Questions
+
+**The Nextcloud app on my phone shows no thumbnails.**
+The app doesn't create them. Open Nextcloud once in the phone's browser, or run **Create missing thumbnails** in the settings. After that the app shows them too.
 
 **A video has no thumbnail.**
 Your browser probably can't play it. Open the video: if it doesn't play, the browser can't render a thumbnail either. Try another browser, then **Create missing thumbnails** with **Retry videos with errors**.
