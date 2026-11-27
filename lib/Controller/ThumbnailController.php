@@ -135,12 +135,17 @@ class ThumbnailController extends Controller {
 	}
 
 	/**
-	 * The worker proves itself with the secret header. A signed-in browser session with a valid
-	 * request token (the Files app script) needs no secret.
+	 * Clients with credentials in the Authorization header (the worker) prove themselves with the
+	 * secret header. A browser session signed in through the login page (the Files app script)
+	 * needs no secret, as long as it passes the CSRF check.
+	 *
+	 * passesCSRFCheck() alone is not enough: it also accepts any request with an OCS-APIRequest header.
 	 */
 	private function secretOk(): bool {
-		return $this->request->passesCSRFCheck()
-			|| $this->secret->verify($this->request->getHeader(SecretService::HEADER));
+		if ($this->request->getHeader('Authorization') === '' && $this->request->passesCSRFCheck()) {
+			return true;
+		}
+		return $this->secret->verify($this->request->getHeader(SecretService::HEADER));
 	}
 
 	private function invalidSecret(): JSONResponse {
