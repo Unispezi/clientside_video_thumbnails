@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\ClientsideVideoThumbnails\AppInfo;
 
+use OCA\ClientsideVideoThumbnails\Listener\CarryThumbnails;
 use OCA\ClientsideVideoThumbnails\Listener\LoadFilesScript;
 use OCA\ClientsideVideoThumbnails\Preview\PreviewProvider;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
@@ -16,6 +17,9 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\Files\Events\Node\BeforeNodeRenamedEvent;
+use OCP\Files\Events\Node\NodeCopiedEvent;
+use OCP\Files\Events\Node\NodeRenamedEvent;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'clientside_video_thumbnails';
@@ -27,6 +31,9 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		$context->registerPreviewProvider(PreviewProvider::class, PreviewProvider::MIME_REGEX);
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadFilesScript::class);
+		$context->registerEventListener(NodeCopiedEvent::class, CarryThumbnails::class);
+		$context->registerEventListener(BeforeNodeRenamedEvent::class, CarryThumbnails::class);
+		$context->registerEventListener(NodeRenamedEvent::class, CarryThumbnails::class);
 	}
 
 	public function boot(IBootContext $context): void {

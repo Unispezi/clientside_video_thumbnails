@@ -46,7 +46,7 @@ class ThumbnailStore {
 	}
 
 	/**
-	 * @param resource $data
+	 * @param resource|string $data
 	 */
 	public function put(int $fileId, $data): void {
 		$folder = $this->getShardFolder($fileId, true);
@@ -57,6 +57,16 @@ class ThumbnailStore {
 			$folder->newFile($name, $data);
 		}
 		$this->forgetServerPreviews($fileId);
+	}
+
+	/**
+	 * Gives the file $to the thumbnail of the file $from, if there is one.
+	 */
+	public function copy(int $from, int $to): void {
+		$thumb = $this->get($from);
+		if ($thumb !== null) {
+			$this->put($to, $thumb->getContent());
+		}
 	}
 
 	/**

@@ -25,6 +25,12 @@
 		nc: 'http://nextcloud.org/ns',
 	}
 
+	/**
+	 * Nextcloud 32 and later return 100 results for a search without a limit. It can't sort by file ID,
+	 * so paging with offsets could skip or repeat videos. Ask for this many at once instead.
+	 */
+	const SEARCH_LIMIT = 100000
+
 	function escapeXml(text) {
 		return text.replace(/[<>&'"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[c])
 	}
@@ -43,6 +49,7 @@
 			+ '<d:from><d:scope><d:href>/files/' + escapeXml(uid) + '</d:href><d:depth>infinity</d:depth></d:scope></d:from>'
 			+ '<d:where><d:like><d:prop><d:getcontenttype/></d:prop><d:literal>video/%</d:literal></d:like></d:where>'
 			+ '<d:orderby/>'
+			+ '<d:limit><d:nresults>' + SEARCH_LIMIT + '</d:nresults></d:limit>'
 			+ '</d:basicsearch>'
 			+ '</d:searchrequest>'
 		const response = await fetch(webroot() + '/remote.php/dav/', {
@@ -197,6 +204,7 @@
 					clearFailed()
 				}
 				const videos = await findVideos(uid)
+				const truncated = videos.length >= SEARCH_LIMIT
 				const missing = videos.filter((v) => !v.hasPreview)
 				const todo = missing.filter((v) => !isFailed(v.fileid))
 				const skipped = missing.length - todo.length
@@ -207,6 +215,7 @@
 					status.textContent = translate('{videos} videos, {missing} without thumbnail. Done: {done} of {todo}, failed: {failed}.', {
 						videos: videos.length, missing: missing.length, done, todo: todo.length, failed,
 					}) + (skipped > 0 ? ' ' + translatePlural('{count} skipped because this browser could not render it before.', '{count} skipped because this browser could not render them before.', skipped, { count: skipped }) : '')
+						+ (truncated ? ' ' + translate('Only the first {count} videos were searched.', { count: SEARCH_LIMIT }) : '')
 					progress.max = Math.max(1, todo.length)
 					progress.value = done + failed
 				}

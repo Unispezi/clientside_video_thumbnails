@@ -85,7 +85,7 @@ check "session upload with request token accepted" 200 \
 check "personal settings page loads the find-and-fix script" 1 \
 	"$(curl -s -b "$jar" "$NC_BASE/index.php/settings/user/$APP" | grep -q "$APP/js/personal" && echo 1 || echo 0)"
 # Same query as js/personal.js
-search_body='<?xml version="1.0" encoding="UTF-8"?><d:searchrequest xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns"><d:basicsearch><d:select><d:prop><oc:fileid/><nc:has-preview/></d:prop></d:select><d:from><d:scope><d:href>/files/'"$NC_ADMIN"'</d:href><d:depth>infinity</d:depth></d:scope></d:from><d:where><d:like><d:prop><d:getcontenttype/></d:prop><d:literal>video/%</d:literal></d:like></d:where><d:orderby/></d:basicsearch></d:searchrequest>'
+search_body='<?xml version="1.0" encoding="UTF-8"?><d:searchrequest xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns"><d:basicsearch><d:select><d:prop><oc:fileid/><nc:has-preview/></d:prop></d:select><d:from><d:scope><d:href>/files/'"$NC_ADMIN"'</d:href><d:depth>infinity</d:depth></d:scope></d:from><d:where><d:like><d:prop><d:getcontenttype/></d:prop><d:literal>video/%</d:literal></d:like></d:where><d:orderby/><d:limit><d:nresults>100000</d:nresults></d:limit></d:basicsearch></d:searchrequest>'
 search_out="$(curl -s -b "$jar" -X SEARCH -H "requesttoken: $session_token" -H 'Content-Type: text/xml; charset=utf-8' --data "$search_body" "$NC_BASE/remote.php/dav/")"
 check "video search finds sample.mp4 with preview" 1 \
 	"$(grep -q 'vtr-test/sample.mp4' <<<"$search_out" && grep -q '<nc:has-preview>true' <<<"$search_out" && echo 1 || echo 0)"
@@ -122,6 +122,22 @@ check "bob sees the video the admin shared, with its preview" true "$(bob_has_pr
 check "deleteMine counts only bob's own video" '"deleted":1' "$(bob_body -X POST "$API/deleteMine" | grep -oE '"deleted":[0-9]+')"
 check "bob's video lost its thumbnail" false "$(bob_has_preview bob.mp4)"
 check "the shared video kept its thumbnail" true "$(has_preview vtr-test/sample.mp4)"
+
+echo "== thumbnails follow copies and moves"
+dav_to() { admin -X "$1" -H "Destination: $DAV/$3" "$DAV/$2" -o /dev/null -w '%{http_code}'; }
+check "copy of a video" 201 "$(dav_to COPY vtr-test/sample.mp4 vtr-test/copy.mp4)"
+check "the copy has the thumbnail" true "$(has_preview vtr-test/copy.mp4)"
+admin -X MKCOL "$DAV/vtr-test/sub" -o /dev/null
+dav_to COPY vtr-test/sample.mp4 vtr-test/sub/a.mp4 >/dev/null
+check "copy of a folder" 201 "$(dav_to COPY vtr-test/sub vtr-test/sub2)"
+check "the video in the copied folder has the thumbnail" true "$(has_preview vtr-test/sub2/a.mp4)"
+# A folder bob shares with the admin lives in bob's storage: moving there gives the video a new ID
+bob_body -X MKCOL "$NC_BASE/remote.php/dav/files/vtr-bob/drop" -o /dev/null
+bob_body -X POST "$NC_BASE/ocs/v2.php/apps/files_sharing/api/v1/shares" -d path=/drop -d shareType=0 -d shareWith="$NC_ADMIN" -d permissions=31 -o /dev/null
+old_id="$(file_id vtr-test/copy.mp4)"
+check "move into a folder shared by someone else" 201 "$(dav_to MOVE vtr-test/copy.mp4 drop/moved.mp4)"
+check "the move gave the video a new ID" 1 "$([[ "$(file_id drop/moved.mp4)" != "$old_id" ]] && echo 1 || echo 0)"
+check "the moved video has the thumbnail" true "$(has_preview drop/moved.mp4)"
 admin -X DELETE "$NC_BASE/ocs/v2.php/cloud/users/vtr-bob" -o /dev/null
 
 echo "== orphan cleanup job"
@@ -148,6 +164,12 @@ check "deleteAll accepted" 200 "$(code -X POST "$API/deleteAll")"
 check "has-preview false after deleteAll" false "$(has_preview vtr-test/sample.mp4)"
 code -F path=/vtr-test/sample.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload" >/dev/null
 check "after deleteAll a new upload is served, not Nextcloud's cached copy" "$first" "$(preview_sum)"
+
+echo "== more than 100 videos"
+admin -X MKCOL "$DAV/vtr-test/many" -o /dev/null
+for i in $(seq 1 105); do dav_to COPY vtr-test/sample.mp4 "vtr-test/many/$i.mp4" >/dev/null; done
+many_out="$(curl -s -b "$jar" -X SEARCH -H "requesttoken: $session_token" -H 'Content-Type: text/xml; charset=utf-8' --data "$search_body" "$NC_BASE/remote.php/dav/")"
+check "video search finds all 105 in many/" 105 "$(grep -oE 'vtr-test/many/[0-9]+\.mp4' <<<"$many_out" | sort -u | wc -l | tr -d ' ')"
 
 echo "== cleanup"
 admin -X DELETE "$DAV/vtr-test" -o /dev/null

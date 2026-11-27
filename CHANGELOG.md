@@ -15,6 +15,7 @@ Forked from [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs
 - Personal settings: a button that deletes the thumbnails of all your own videos.
 - Personal settings: render in Files only on Wi-Fi or Ethernet, only while charging. Per account; enforced where the browser can tell (Chrome on Android).
 - Find and fix warns on mobile data, with the data saver on or on battery.
+- Copying a video, or moving it to another storage, keeps its thumbnail.
 - Admin settings: a button that deletes all video thumbnails, for testing.
 
 ### Changed
@@ -25,6 +26,9 @@ Forked from [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs
 
 ### Removed
 - The Node.js worker, the API secret with its admin settings, the `exists` and `batchExists` endpoints and the capabilities entry. They only served the worker. For videos no browser can play, the worker of Video Thumbnail Relay remains an option.
+
+### Fixed
+- Find and fix only saw 100 videos on Nextcloud 32 and later, whose search returns 100 results unless asked for more.
 
 ## 1.0.0 - 2026-10-12
 
