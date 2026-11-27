@@ -13,7 +13,7 @@
 	},
 	"require-dev": {
 		"nextcloud/ocp": "dev-stable33",
-		"vimeo/psalm": "^6.13"
+		"vimeo/psalm": "^7.17"
 	},
 	"scripts": {
 		"lint": "find . -name '*.php' -not -path './vendor/*' -not -path './worker/*' -print0 | xargs -0 -n1 php -l",
