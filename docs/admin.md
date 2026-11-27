@@ -1,6 +1,6 @@
 # For admins
 
-[← Overview](index.md)
+[← Overview](index.md) · [Deutsch](de/admin.md)
 
 ## Install
 

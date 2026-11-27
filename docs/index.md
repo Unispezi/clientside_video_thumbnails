@@ -1,5 +1,7 @@
 # Clientside Video Thumbnails
 
+[Deutsch](de/index.md)
+
 Video previews for Nextcloud instances that can't run FFmpeg, such as managed hosting like Hetzner Storage Share. Your browser renders them.
 
 ## How it works
