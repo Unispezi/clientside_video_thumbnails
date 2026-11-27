@@ -13,7 +13,7 @@ There are two parts:
 - It takes the same frame Nextcloud's own video previews (ffmpeg) would: at 5 seconds, at 1 second for shorter videos, else the first. It keeps the full resolution up to 4096 pixels; the server scales it down for every smaller preview.
 - It reads the video with a `<video>` element. The browser fetches only the parts it needs via HTTP range requests (the index and the data around the frame it needs), not the whole file.
 - With the browser's data saver on (`navigator.connection.saveData`, Chrome and Android), it renders nothing.
-- Under **Personal settings → Clientside Video Thumbnails → When to render in Files**, each account can allow it only on Wi-Fi or Ethernet and only while charging. The switches apply on all devices of the account. Browsers that can't tell their network type or battery state (Safari, Firefox) render anyway.
+- Under **Personal settings → Clientside Video Thumbnails → Automatically generate video thumbnails**, each account can allow it only on Wi-Fi or Ethernet and only while charging. The switches apply on all devices of the account. Browsers that can't tell their network type or battery state (Safari, Firefox) render anyway.
 - On mobile: if the browser ignores `preload` (iOS Safari), the script briefly starts muted playback to get the video loading. Before drawing it waits for the decoded frame (`requestVideoFrameCallback`), so mobile browsers don't hand out a black image.
 - Videos the browser can't decode (often HEVC, MKV, AVI, depending on browser) are remembered in `localStorage` and not retried for 30 days. They stay without a preview, unless another browser can play them. Silversong88's [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs_relay) has an FFmpeg worker for such videos.
 - To switch it off in one browser: `localStorage.setItem('clientside_video_thumbnails.disabled', '1')` in the developer console.
@@ -22,11 +22,11 @@ It relies on markup that is the same in Nextcloud 31 to 34: list rows carry `dat
 
 ## Find and fix mode
 
-Under **Personal settings → Clientside Video Thumbnails → Find and fix videos without thumbnail**, one DAV search finds all your videos without a preview, in every folder. The page then renders and uploads a frame for each, one at a time, with progress and a list of the videos that failed. Keep the page open and in front until it is done: browsers pause hidden pages. On phones it asks the browser to keep the screen on. It warns, but goes on, when the device is on mobile data, has the data saver on or is not charging. Tick **Also retry videos this browser could not render before** to ignore the failure cache, for example after switching to a browser with more codecs.
+Under **Personal settings → Clientside Video Thumbnails → Find and fix videos without thumbnail**, one DAV search finds all your videos without a preview, in every folder. The page then renders and uploads a frame for each, one at a time, with progress and a list of the videos that failed. Keep the page open and in front until it is done: browsers pause hidden pages. On phones it asks the browser to keep the screen on. It warns, but goes on, when the device is on mobile data, has the data saver on or is not charging. Tick **Retry videos with errors** to ignore the failure cache, for example after switching to a browser with more codecs.
 
 ## Starting over
 
-Under **Personal settings → Clientside Video Thumbnails → Delete all my thumbnails**, every user can delete the thumbnails of their own videos. Videos others shared with them keep theirs.
+Under **Personal settings → Clientside Video Thumbnails → Delete ALL my thumbnails**, every user can delete the thumbnails of their own videos. Videos others shared with them keep theirs.
 
 For testing, **Administration settings → Additional settings → Clientside Video Thumbnails → Delete all video thumbnails** removes every thumbnail of all users, along with the previews Nextcloud made from them, and clears the failure cache of the browser you click it in. Videos get new thumbnails the next time they show up in Files or in find-and-fix mode.
 

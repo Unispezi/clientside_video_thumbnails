@@ -30,23 +30,23 @@
 		<ul id="cvt-failures-list"></ul>
 	</details>
 
-	<h3><?php p($l->t('Automaticalle generate video thumbnails')); ?></h3>
+	<h3><?php p($l->t('Automatically generate video thumbnails')); ?></h3>
 	<p class="settings-hint">
 		<?php p($l->t('Generate video thumbnails when videos are listed. This will download a part of the video and upload the thumbnail, so it uses some battery and network traffic.')); ?>
 	</p>
 	<p>
 		<input id="cvt-wifi-only" type="checkbox" class="checkbox">
-		<label for="cvt-wifi-only"><?php p($l->t('Mobile Device: Only on Wi-Fi')); ?></label>
+		<label for="cvt-wifi-only"><?php p($l->t('Mobile device: only on Wi-Fi')); ?></label>
 	</p>
 	<p>
 		<input id="cvt-charging-only" type="checkbox" class="checkbox">
-		<label for="cvt-charging-only"><?php p($l->t('Mobile Device: Only while charging')); ?></label>
+		<label for="cvt-charging-only"><?php p($l->t('Mobile device: only while charging')); ?></label>
 	</p>
 	<p id="cvt-device-state" class="cvt-current" aria-live="polite"></p>
 
 	<h3><?php p($l->t('Delete ALL my thumbnails')); ?></h3>
 	<p class="settings-hint">
-		<?php p($l->t('Deletes ALL existing video thumbnails. They will be re-generated the next time the video is listed.')); ?>
+		<?php p($l->t('Deletes ALL existing video thumbnails. They will be regenerated the next time the video is listed.')); ?>
 	</p>
 	<button id="cvt-delete-mine" class="button" type="button"><?php p($l->t('Delete all my thumbnails')); ?></button>
 	<span id="cvt-delete-mine-status" aria-live="polite"></span>
