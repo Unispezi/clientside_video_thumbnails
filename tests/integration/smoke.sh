@@ -85,11 +85,13 @@ jar="$TMP/cookies"
 # Session cookie without scripting the login form: Nextcloud keeps the user signed in on the session
 # that a Basic-auth request opens, the same way the desktop client avoids re-sending its password.
 # Every later request sends only the cookie, never an Authorization header.
-session_token="$(curl -s -c "$jar" -b "$jar" -u "$NC_ADMIN:$NC_PASS" "$NC_BASE/index.php/csrftoken" | sed -nE 's/.*"token":"([^"]+)".*/\1/p')"
-session_user="$(curl -s -c "$jar" -b "$jar" -H 'OCS-APIRequest: true' "$NC_BASE/ocs/v2.php/cloud/user?format=json" | grep -oE '"id":"[^"]+"' | head -1 | cut -d'"' -f4)"
+session_token="$(curl -s -c "$jar" -b "$jar" -u "$NC_ADMIN:$NC_PASS" "$NC_BASE/index.php/csrftoken" | sed -nE 's/.*"token":"([^"]+)".*/\1/p' || true)"
+session_answer="$(curl -s -c "$jar" -b "$jar" -H 'OCS-APIRequest: true' -w ' HTTP %{http_code}' "$NC_BASE/ocs/v2.php/cloud/user?format=json" || true)"
+session_user="$(grep -oE '"id":"[^"]+"' <<<"$session_answer" | head -1 | cut -d'"' -f4 || true)"
 check "cookie session signed in" "$NC_ADMIN" "$session_user"
 if [[ "$session_user" != "$NC_ADMIN" ]]; then
-	echo "        csrftoken: ${#session_token} chars, cookies: $(sed 's/^#HttpOnly_//' "$jar" | grep -v '^#' | awk 'NF {print $6}' | tr '\n' ' ')"
+	echo "        csrftoken: ${#session_token} chars, cookies: $(sed 's/^#HttpOnly_//' "$jar" | grep -v '^#' | awk 'NF {print $6}' | tr '\n' ' ' || true)"
+	printf '        answer: %.300s\n' "$session_answer"
 fi
 browser() { curl -s -b "$jar" -o "$TMP/last-body" -w '%{http_code}' "$@"; }
 check "Files app loads the browser script" 1 \
