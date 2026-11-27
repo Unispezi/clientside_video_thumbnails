@@ -30,7 +30,7 @@ class PersonalSection implements IIconSection {
 	}
 
 	public function getName(): string {
-		return $this->l->t('Video thumbnails');
+		return $this->l->t('Clientside Video Thumbnails');
 	}
 
 	public function getPriority(): int {
@@ -38,6 +38,6 @@ class PersonalSection implements IIconSection {
 	}
 
 	public function getIcon(): string {
-		return $this->urlGenerator->imagePath(Application::APP_ID, 'app.svg');
+		return $this->urlGenerator->imagePath(Application::APP_ID, 'app-dark.svg');
 	}
 }
