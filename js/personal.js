@@ -12,7 +12,7 @@
 	if (!core) {
 		return
 	}
-	const { APP_ID, isFailed, markFailed, clearFailed, currentUser, requestToken, webroot, davUrl, renderFrame, upload } = core
+	const { APP_ID, isFailed, markFailed, clearFailed, currentUser, requestToken, webroot, saveData, getPreferences, setPreference, onWifi, isCharging, onConditionsChange, davUrl, renderFrame, upload } = core
 
 	const translate = (text, vars) => (typeof window.t === 'function' ? window.t(APP_ID, text, vars) : text.replace(/{(\w+)}/g, (m, k) => (vars && k in vars ? vars[k] : m)))
 	const translatePlural = (singular, plural, count, vars) => (typeof window.n === 'function'
@@ -90,6 +90,57 @@
 		const failuresList = el('cvt-failures-list')
 
 		let stopRequested = false
+
+		// ---- the account's switches, and what this device reports ----
+
+		const deviceState = el('cvt-device-state')
+		async function showDeviceState() {
+			const wifi = onWifi()
+			const charging = await isCharging()
+			deviceState.textContent = translate('This device: {network}, {battery}.', {
+				network: wifi === null ? translate('network type unknown') : wifi ? translate('on Wi-Fi or Ethernet') : translate('on mobile data'),
+				battery: charging === null ? translate('charging state unknown') : charging ? translate('charging') : translate('on battery'),
+			})
+		}
+		for (const [key, box] of [['wifi_only', el('cvt-wifi-only')], ['charging_only', el('cvt-charging-only')]]) {
+			box.checked = getPreferences()[key] === true
+			box.addEventListener('change', async () => {
+				box.disabled = true
+				try {
+					await setPreference(key, box.checked)
+				} catch (e) {
+					box.checked = !box.checked
+					deviceState.textContent = translate('Could not save: {reason}', { reason: e.message })
+				} finally {
+					box.disabled = false
+				}
+			})
+		}
+		showDeviceState()
+		onConditionsChange(showDeviceState)
+
+		const warnings = el('cvt-warnings')
+		/** Not a reason to stop: the user started this on purpose. Just say what it costs. */
+		async function showWarnings() {
+			const items = []
+			if (onWifi() === false) {
+				items.push(translate('You are on mobile data. Each video costs a few MB.'))
+			}
+			if (saveData()) {
+				items.push(translate('Data saver is on.'))
+			}
+			if ((await isCharging()) === false) {
+				items.push(translate('Not charging. Rendering many videos drains the battery.'))
+			}
+			warnings.replaceChildren(...items.map((text) => {
+				const item = document.createElement('li')
+				item.textContent = '⚠ ' + text
+				return item
+			}))
+			warnings.classList.toggle('hidden', items.length === 0)
+		}
+		showWarnings()
+		onConditionsChange(showWarnings)
 
 		function addFailure(path, reason) {
 			const item = document.createElement('li')

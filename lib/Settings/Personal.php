@@ -10,7 +10,10 @@ declare(strict_types=1);
 namespace OCA\ClientsideVideoThumbnails\Settings;
 
 use OCA\ClientsideVideoThumbnails\AppInfo\Application;
+use OCA\ClientsideVideoThumbnails\Service\Preferences;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IInitialState;
+use OCP\IUserSession;
 use OCP\Settings\ISettings;
 use OCP\Util;
 
@@ -18,7 +21,18 @@ use OCP\Util;
  * Page for finding all of the user's videos without a preview and rendering them in the browser.
  */
 class Personal implements ISettings {
+	public function __construct(
+		private IInitialState $initialState,
+		private IUserSession $userSession,
+		private Preferences $preferences,
+	) {
+	}
+
 	public function getForm(): TemplateResponse {
+		$user = $this->userSession->getUser();
+		if ($user !== null) {
+			$this->initialState->provideInitialState('preferences', $this->preferences->get($user->getUID()));
+		}
 		Util::addScript(Application::APP_ID, 'core');
 		Util::addScript(Application::APP_ID, 'personal');
 		Util::addStyle(Application::APP_ID, 'personal');

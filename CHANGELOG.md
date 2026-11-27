@@ -13,6 +13,8 @@ Forked from [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs
 - Support for Nextcloud 34.
 - Mobile browsers: muted playback kick-off when iOS Safari ignores `preload`, waiting for the decoded frame before drawing, and no rendering while the data saver is on.
 - Personal settings: a button that deletes the thumbnails of all your own videos.
+- Personal settings: render in Files only on Wi-Fi or Ethernet, only while charging. Per account; enforced where the browser can tell (Chrome on Android).
+- Find and fix warns on mobile data, with the data saver on or on battery.
 - Admin settings: a button that deletes all video thumbnails, for testing.
 
 ### Changed

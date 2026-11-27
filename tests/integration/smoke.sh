@@ -94,6 +94,14 @@ check "video search leaves out other files" 0 "$(grep -c 'notes.txt' <<<"$search
 check "session upload without request token rejected" 412 \
 	"$(browser -F path=/vtr-test/sample.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload")"
 
+echo "== preferences"
+prefs() { admin -X PUT -H 'Content-Type: application/json' -d "$1" "$NC_BASE/index.php/apps/$APP/preferences"; }
+check "switch saved" '"wifi_only":true' "$(prefs '{"key":"wifi_only","value":true}' | grep -oE '"wifi_only":(true|false)')"
+check "files page hands the switches to the script" 1 \
+	"$(curl -s -b "$jar" "$NC_BASE/index.php/apps/files/" | grep -q 'initial-state-'"$APP"'-preferences' && echo 1 || echo 0)"
+check "switch cleared" '"wifi_only":false' "$(prefs '{"key":"wifi_only","value":false}' | grep -oE '"wifi_only":(true|false)')"
+check "unknown switch rejected" 400 "$(code -X PUT -H 'Content-Type: application/json' -d '{"key":"nope","value":true}' "$NC_BASE/index.php/apps/$APP/preferences")"
+
 echo "== admin-only routes"
 bob_pass="$(head -c 18 /dev/urandom | base64 | tr -d '/+=')Aa1!"
 admin -X POST "$NC_BASE/ocs/v2.php/cloud/users" -d userid=vtr-bob --data-urlencode "password=$bob_pass" -o /dev/null

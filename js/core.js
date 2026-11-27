@@ -74,6 +74,72 @@
 		return navigator.connection?.saveData === true
 	}
 
+	// ---- the account's switches, and what this device can tell about its network and battery ----
+
+	const DEFAULT_PREFERENCES = { wifi_only: false, charging_only: false }
+	let preferences = null
+
+	/** The account's switches, as the server handed them to the page and as changed since. */
+	function getPreferences() {
+		if (preferences === null) {
+			try {
+				preferences = { ...DEFAULT_PREFERENCES, ...window.OCP?.InitialState?.loadState(APP_ID, 'preferences') }
+			} catch {
+				preferences = { ...DEFAULT_PREFERENCES }
+			}
+		}
+		return preferences
+	}
+
+	async function setPreference(key, value) {
+		const response = await fetch(webroot() + '/index.php/apps/' + APP_ID + '/preferences', {
+			method: 'PUT',
+			headers: { requesttoken: requestToken(), Accept: 'application/json', 'Content-Type': 'application/json' },
+			body: JSON.stringify({ key, value }),
+		})
+		if (!response.ok) {
+			throw new Error('HTTP ' + response.status)
+		}
+		preferences = { ...DEFAULT_PREFERENCES, ...(await response.json()).preferences }
+		return preferences
+	}
+
+	/**
+	 * true on Wi-Fi or Ethernet, false on mobile data and the like, null where the browser doesn't
+	 * say (Safari, Firefox, desktop Chrome often says "unknown").
+	 */
+	function onWifi() {
+		const type = navigator.connection?.type
+		if (!type || type === 'unknown' || type === 'other' || type === 'none') {
+			return null
+		}
+		return type === 'wifi' || type === 'ethernet'
+	}
+
+	/** true while charging, false on battery, null where the browser doesn't say (Safari, Firefox). */
+	async function isCharging() {
+		try {
+			return typeof navigator.getBattery === 'function' ? (await navigator.getBattery()).charging : null
+		} catch {
+			return null
+		}
+	}
+
+	/** Calls back whenever the network or the charging state changes. */
+	async function onConditionsChange(callback) {
+		navigator.connection?.addEventListener?.('change', callback)
+		try {
+			(await navigator.getBattery?.())?.addEventListener('chargingchange', callback)
+		} catch {
+		}
+	}
+
+	/** Whether the account's switches allow rendering on this device right now. Unknown counts as allowed. */
+	async function conditionsAllow() {
+		const { wifi_only: wifiOnly, charging_only: chargingOnly } = getPreferences()
+		return !(wifiOnly && onWifi() === false) && !(chargingOnly && (await isCharging()) === false)
+	}
+
 	function davUrl(uid, path) {
 		const encoded = path.split('/').filter(Boolean).map(encodeURIComponent).join('/')
 		return webroot() + '/remote.php/dav/files/' + encodeURIComponent(uid) + '/' + encoded
@@ -194,6 +260,12 @@
 		requestToken,
 		webroot,
 		saveData,
+		getPreferences,
+		setPreference,
+		onWifi,
+		isCharging,
+		onConditionsChange,
+		conditionsAllow,
 		davUrl,
 		renderFrame,
 		upload,

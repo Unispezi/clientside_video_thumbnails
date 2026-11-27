@@ -30,3 +30,12 @@
 #clientside-video-thumbnails-personal #cvt-delete-mine-status {
 	margin-inline-start: 8px;
 }
+
+#clientside-video-thumbnails-personal .cvt-warnings {
+	list-style: none;
+	color: var(--color-warning-text, var(--color-warning));
+}
+
+#clientside-video-thumbnails-personal .cvt-warnings.hidden {
+	display: none;
+}

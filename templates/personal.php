@@ -20,6 +20,7 @@
 	<button id="cvt-start" class="button primary" type="button"><?php p($l->t('Find and fix')); ?></button>
 	<button id="cvt-stop" class="button hidden" type="button"><?php p($l->t('Stop')); ?></button>
 
+	<ul id="cvt-warnings" class="cvt-warnings hidden"></ul>
 	<p id="cvt-status" aria-live="polite"></p>
 	<progress id="cvt-progress" class="hidden" max="1" value="0"></progress>
 	<p id="cvt-current" class="cvt-current"></p>
@@ -28,6 +29,20 @@
 		<summary id="cvt-failures-title"></summary>
 		<ul id="cvt-failures-list"></ul>
 	</details>
+
+	<h3><?php p($l->t('When to render in Files')); ?></h3>
+	<p class="settings-hint">
+		<?php p($l->t('Applies to your account on all your devices, for the thumbnails rendered while you browse your files. Browsers that can\'t tell their network or battery state, such as Safari and Firefox, render anyway.')); ?>
+	</p>
+	<p>
+		<input id="cvt-wifi-only" type="checkbox" class="checkbox">
+		<label for="cvt-wifi-only"><?php p($l->t('Only on Wi-Fi or Ethernet')); ?></label>
+	</p>
+	<p>
+		<input id="cvt-charging-only" type="checkbox" class="checkbox">
+		<label for="cvt-charging-only"><?php p($l->t('Only while charging')); ?></label>
+	</p>
+	<p id="cvt-device-state" class="cvt-current" aria-live="polite"></p>
 
 	<h3><?php p($l->t('Delete my thumbnails')); ?></h3>
 	<p class="settings-hint">

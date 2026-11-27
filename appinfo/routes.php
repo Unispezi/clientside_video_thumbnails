@@ -11,6 +11,7 @@ return [
 	'routes' => [
 		['name' => 'thumbnail#upload', 'url' => '/thumbnail/upload', 'verb' => 'POST'],
 		['name' => 'thumbnail#deleteMine', 'url' => '/thumbnail/deleteMine', 'verb' => 'POST'],
+		['name' => 'preferences#set', 'url' => '/preferences', 'verb' => 'PUT'],
 		['name' => 'thumbnail#deleteAll', 'url' => '/thumbnail/deleteAll', 'verb' => 'POST'],
 	],
 ];

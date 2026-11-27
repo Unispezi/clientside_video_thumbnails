@@ -21,7 +21,7 @@
 	if (!core) {
 		return
 	}
-	const { APP_ID, PREFIX, isFailed, markFailed, currentUser, requestToken, saveData, davUrl, renderFrame, upload } = core
+	const { APP_ID, PREFIX, isFailed, markFailed, currentUser, requestToken, saveData, onConditionsChange, conditionsAllow, davUrl, renderFrame, upload } = core
 
 	if (localStorage.getItem(PREFIX + 'disabled') === '1') {
 		return
@@ -33,6 +33,8 @@
 	const queue = new Map()
 	let busy = false
 	let scanScheduled = false
+	/** Whether the account's switches (only on Wi-Fi, only while charging) allow rendering right now */
+	let allowed = false
 
 	// ---- context: user, current folder ----
 
@@ -121,7 +123,7 @@
 				show(img, fileid, rendered.get(fileid))
 				continue
 			}
-			if (!uid || dir === null || !name || isFailed(fileid) || saveData()) {
+			if (!allowed || !uid || dir === null || !name || isFailed(fileid) || saveData()) {
 				continue
 			}
 			seen.add(fileid)
@@ -176,7 +178,7 @@
 		}
 		busy = true
 		try {
-			while (queue.size > 0) {
+			while (queue.size > 0 && allowed) {
 				const [fileid, item] = queue.entries().next().value
 				queue.delete(fileid)
 				await process(item)
@@ -225,7 +227,14 @@
 
 	// ---- wiring ----
 
+	async function updateAllowed() {
+		allowed = await conditionsAllow()
+		scheduleScan()
+	}
+
 	function init() {
+		onConditionsChange(updateAllowed)
+		updateAllowed()
 		new MutationObserver(scheduleScan).observe(document.body, {
 			childList: true,
 			subtree: true,

@@ -10,18 +10,20 @@ declare(strict_types=1);
 namespace OCA\ClientsideVideoThumbnails\Migration;
 
 use OCA\ClientsideVideoThumbnails\AppInfo\Application;
+use OCA\ClientsideVideoThumbnails\Service\Preferences;
 use OCA\ClientsideVideoThumbnails\Service\ThumbnailStore;
 use OCP\IAppConfig;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
 /**
- * Removes all stored thumbnails and app settings when the app is uninstalled.
+ * Removes all stored thumbnails, app settings and users' preferences when the app is uninstalled.
  */
 class UninstallCleanup implements IRepairStep {
 	public function __construct(
 		private ThumbnailStore $store,
 		private IAppConfig $appConfig,
+		private Preferences $preferences,
 	) {
 	}
 
@@ -32,5 +34,6 @@ class UninstallCleanup implements IRepairStep {
 	public function run(IOutput $output): void {
 		$this->store->deleteAll();
 		$this->appConfig->deleteApp(Application::APP_ID);
+		$this->preferences->deleteAll();
 	}
 }
