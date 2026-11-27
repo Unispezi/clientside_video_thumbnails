@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2026 Unispezi
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Every file states its copyright and licence (SPDX header or REUSE.toml). https://reuse.software
+
+name: REUSE
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  reuse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: REUSE compliance
+        uses: fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6.0.0

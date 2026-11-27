@@ -55,7 +55,13 @@ composer run psalm                      # static analysis (against nextcloud/ocp
 tests/integration/run-docker.sh 34      # end-to-end test in a throwaway Nextcloud 34 container
 ```
 
-CI runs the same checks on every push and pull request: info.xml validation, PHP lint on PHP 8.2 and 8.5, psalm against the Nextcloud 31–34 public API, and the integration tests on Nextcloud 31 to 34. The browser script itself is not tested automatically; check it by hand in a real browser.
+CI runs the same checks on every push and pull request: REUSE licence check, info.xml validation, PHP lint on PHP 8.2 and 8.5, psalm against the Nextcloud 31–34 public API, and the integration tests on Nextcloud 31 to 34. The browser script itself is not tested automatically; check it by hand in a real browser.
+
+## Release
+
+1. In `CHANGELOG.md`, date the entry: `## 1.1.0 - YYYY-MM-DD`. Commit.
+2. `tools/release.sh` builds `build/clientside_video_thumbnails-<version>.tar.gz` from HEAD and signs it with `~/.nextcloud/certificates/clientside_video_thumbnails.key`. What stays out of the tarball is listed in `.gitattributes`.
+3. `tools/release.sh --publish` also tags the version, creates the GitHub release and prints the download URL and signature for the App Store's "Upload app release" form.
 
 ## Credits
 
