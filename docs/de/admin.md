@@ -36,4 +36,4 @@ Sie bleiben ohne Vorschaubild. Wer die braucht: Die App [Video Thumbnail Relay](
 
 ## Probleme
 
-[Melde einen Fehler](https://github.com/Unispezi/clientside_video_thumbnails/issues) mit deiner Nextcloud-Version, dem Browser und, wenn möglich, den Einträgen im Nextcloud-Log, die `clientside_video_thumbnails` erwähnen. Gern auf Englisch.
+[Melde einen Fehler](https://github.com/Unispezi/nextcloud-clientside-video-thumbnails/issues) mit deiner Nextcloud-Version, dem Browser und, wenn möglich, den Einträgen im Nextcloud-Log, die `clientside_video_thumbnails` erwähnen. Gern auf Englisch.

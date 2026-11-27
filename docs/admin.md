@@ -33,4 +33,4 @@ They stay without a preview. If you need those, the [Video Thumbnail Relay](http
 
 ## Problems
 
-[Open an issue](https://github.com/Unispezi/clientside_video_thumbnails/issues) with your Nextcloud version, browser and, if you can, the entries from the Nextcloud log that mention `clientside_video_thumbnails`.
+[Open an issue](https://github.com/Unispezi/nextcloud-clientside-video-thumbnails/issues) with your Nextcloud version, browser and, if you can, the entries from the Nextcloud log that mention `clientside_video_thumbnails`.

@@ -37,14 +37,14 @@ This app is a fork of [Video Thumbnail Relay](https://github.com/silversong88/vi
     <author homepage="https://github.com/hersche">Vinzenz Hersche</author>
     <namespace>ClientsideVideoThumbnails</namespace>
     <documentation>
-        <user>https://unispezi.github.io/clientside_video_thumbnails/user.html</user>
-        <admin>https://unispezi.github.io/clientside_video_thumbnails/admin.html</admin>
-        <developer>https://github.com/Unispezi/clientside_video_thumbnails#readme</developer>
+        <user>https://unispezi.github.io/nextcloud-clientside-video-thumbnails/user.html</user>
+        <admin>https://unispezi.github.io/nextcloud-clientside-video-thumbnails/admin.html</admin>
+        <developer>https://github.com/Unispezi/nextcloud-clientside-video-thumbnails#readme</developer>
     </documentation>
     <category>multimedia</category>
-    <website>https://unispezi.github.io/clientside_video_thumbnails/</website>
-    <bugs>https://github.com/Unispezi/clientside_video_thumbnails/issues</bugs>
-    <repository type="git">https://github.com/Unispezi/clientside_video_thumbnails.git</repository>
+    <website>https://unispezi.github.io/nextcloud-clientside-video-thumbnails/</website>
+    <bugs>https://github.com/Unispezi/nextcloud-clientside-video-thumbnails/issues</bugs>
+    <repository type="git">https://github.com/Unispezi/nextcloud-clientside-video-thumbnails.git</repository>
     <dependencies>
         <php min-version="8.2" max-version="8.5"/>
         <nextcloud min-version="31" max-version="34"/>

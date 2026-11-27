@@ -1,6 +1,6 @@
 # Clientside Video Thumbnails for Nextcloud
 
-**Help for users and admins: https://unispezi.github.io/clientside_video_thumbnails/** (from `docs/`)
+**Help for users and admins: https://unispezi.github.io/nextcloud-clientside-video-thumbnails/** (from `docs/`)
 
 Video previews for Nextcloud instances that can't run FFmpeg themselves, such as managed and shared hosting like Hetzner Storage Share.
 

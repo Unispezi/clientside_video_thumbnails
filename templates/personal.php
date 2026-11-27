@@ -6,7 +6,7 @@
  * @var \OCP\IL10N $l
  */
 // Help pages exist in English and German
-$docs = 'https://unispezi.github.io/clientside_video_thumbnails/' . (str_starts_with($l->getLanguageCode(), 'de') ? 'de/' : '');
+$docs = 'https://unispezi.github.io/nextcloud-clientside-video-thumbnails/' . (str_starts_with($l->getLanguageCode(), 'de') ? 'de/' : '');
 ?>
 <div id="clientside-video-thumbnails-personal">
 <div class="section">

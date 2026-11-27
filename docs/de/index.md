@@ -34,5 +34,5 @@ Diese App baut auf der Arbeit anderer auf. Herzlichen Dank an **Vinzenz Hersche*
 
 ## Links
 
-- [Quellcode und Fehlermeldungen](https://github.com/Unispezi/clientside_video_thumbnails)
-- [Änderungen](https://github.com/Unispezi/clientside_video_thumbnails/blob/main/CHANGELOG.md) (englisch)
+- [Quellcode und Fehlermeldungen](https://github.com/Unispezi/nextcloud-clientside-video-thumbnails)
+- [Änderungen](https://github.com/Unispezi/nextcloud-clientside-video-thumbnails/blob/main/CHANGELOG.md) (englisch)

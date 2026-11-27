@@ -31,5 +31,5 @@ This app stands on the shoulders of others. Many thanks to **Vinzenz Hersche** f
 
 ## Links
 
-- [Source code and issues](https://github.com/Unispezi/clientside_video_thumbnails)
-- [Changelog](https://github.com/Unispezi/clientside_video_thumbnails/blob/main/CHANGELOG.md)
+- [Source code and issues](https://github.com/Unispezi/nextcloud-clientside-video-thumbnails)
+- [Changelog](https://github.com/Unispezi/nextcloud-clientside-video-thumbnails/blob/main/CHANGELOG.md)
