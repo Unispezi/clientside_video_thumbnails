@@ -106,6 +106,7 @@
 				if (img.getAttribute('src')?.startsWith('blob:')) {
 					img.src = img.dataset.cvtOriginal
 				}
+				img.style.objectFit = ''
 				delete img.dataset.cvtFileid
 				delete img.dataset.cvtOriginal
 			}
@@ -139,9 +140,22 @@
 		pump()
 	}
 
+	/**
+	 * Whether Files asks the server for square-cropped previews (the user setting "Crop image
+	 * previews", on by default). Our frame keeps its aspect ratio, so it is cropped by CSS instead.
+	 */
+	function cropPreviews() {
+		try {
+			return window.OCP?.InitialState?.loadState('files', 'config')?.crop_image_previews !== false
+		} catch {
+			return true
+		}
+	}
+
 	function show(img, fileid, url) {
 		img.dataset.cvtOriginal = img.getAttribute('src')
 		img.dataset.cvtFileid = fileid
+		img.style.objectFit = cropPreviews() ? 'cover' : ''
 		img.src = url
 	}
 
