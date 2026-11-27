@@ -16,11 +16,11 @@
 </div>
 
 <div class="section">
-	<h2><?php p($l->t('Start over')); ?></h2>
+	<h2><?php p($l->t('Delete ALL thumbnails of all users')); ?></h2>
 	<p class="settings-hint">
-		<?php p($l->t('Deletes every video thumbnail of all users, and the previews Nextcloud made from them. Browsers render them again when the videos show up in Files. Meant for testing.')); ?>
+		<?php p($l->t('Deletes ALL video thumbnails of all users. They will be regenerated the next time a video is listed.')); ?>
 	</p>
-	<button id="cvt-delete-all" class="button" type="button"><?php p($l->t('Delete all video thumbnails')); ?></button>
+	<button id="cvt-delete-all" class="button" type="button"><?php p($l->t('Delete all thumbnails of all users')); ?></button>
 	<span id="cvt-delete-all-message" class="msg" aria-live="polite"></span>
 </div>
 </div>
