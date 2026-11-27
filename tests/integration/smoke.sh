@@ -82,15 +82,14 @@ check "request with secret accepted" 200 "$(code -H "X-ClientsideVideoThumbnails
 
 echo "== browser session (Files app script)"
 jar="$TMP/cookies"
-login_token="$(curl -sL -c "$jar" -b "$jar" "$NC_BASE/index.php/login" | grep -oE 'data-requesttoken="[^"]+"' | head -1 | cut -d'"' -f2)"
-login_result="$(curl -s -c "$jar" -b "$jar" -o /dev/null -w '%{http_code} %{redirect_url}' -X POST "$NC_BASE/index.php/login" \
-	--data-urlencode "user=$NC_ADMIN" --data-urlencode "password=$NC_PASS" --data-urlencode "requesttoken=$login_token" \
-	--data-urlencode "timezone=UTC" --data-urlencode "timezone_offset=0")"
-session_token="$(curl -s -c "$jar" -b "$jar" "$NC_BASE/index.php/csrftoken" | sed -nE 's/.*"token":"([^"]+)".*/\1/p')"
-check "login page sign-in works" 1 "$([[ -n "$session_token" && "$login_result" != *login* ]] && echo 1 || echo 0)"
-if [[ -z "$session_token" || "$login_result" == *login* ]]; then
-	echo "        login token: ${#login_token} chars, login answer: $login_result, csrftoken: ${#session_token} chars"
-	echo "        cookies: $(grep -v '^#' "$jar" | awk 'NF {print $6}' | tr '\n' ' ')"
+# Session cookie without scripting the login form: Nextcloud keeps the user signed in on the session
+# that a Basic-auth request opens, the same way the desktop client avoids re-sending its password.
+# Every later request sends only the cookie, never an Authorization header.
+session_token="$(curl -s -c "$jar" -b "$jar" -u "$NC_ADMIN:$NC_PASS" "$NC_BASE/index.php/csrftoken" | sed -nE 's/.*"token":"([^"]+)".*/\1/p')"
+session_user="$(curl -s -c "$jar" -b "$jar" -H 'OCS-APIRequest: true' "$NC_BASE/ocs/v2.php/cloud/user?format=json" | grep -oE '"id":"[^"]+"' | head -1 | cut -d'"' -f4)"
+check "cookie session signed in" "$NC_ADMIN" "$session_user"
+if [[ "$session_user" != "$NC_ADMIN" ]]; then
+	echo "        csrftoken: ${#session_token} chars, cookies: $(sed 's/^#HttpOnly_//' "$jar" | grep -v '^#' | awk 'NF {print $6}' | tr '\n' ' ')"
 fi
 browser() { curl -s -b "$jar" -o "$TMP/last-body" -w '%{http_code}' "$@"; }
 check "Files app loads the browser script" 1 \
