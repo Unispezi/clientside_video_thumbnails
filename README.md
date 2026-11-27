@@ -1,4 +1,4 @@
-# Clientside Video Thumbnails
+# Clientside Video Thumbnails for Nextcloud
 
 **Help for users and admins: https://unispezi.github.io/clientside_video_thumbnails/** (from `docs/`)
 

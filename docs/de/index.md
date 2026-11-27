@@ -1,4 +1,7 @@
-# Clientside Video Thumbnails
+---
+description: Video-Vorschaubilder für Nextcloud ohne FFmpeg, erzeugt in deinem Browser
+---
+# Clientside Video Thumbnails für Nextcloud
 
 [English](../index.md)
 

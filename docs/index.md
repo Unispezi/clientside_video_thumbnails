@@ -1,4 +1,4 @@
-# Clientside Video Thumbnails
+# Clientside Video Thumbnails for Nextcloud
 
 [Deutsch](de/index.md)
 

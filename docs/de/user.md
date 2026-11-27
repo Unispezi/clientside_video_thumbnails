@@ -1,3 +1,6 @@
+---
+description: Video-Vorschaubilder für Nextcloud ohne FFmpeg, erzeugt in deinem Browser
+---
 # Für Nutzer
 
 [← Übersicht](index.md) · [English](../user.md)
