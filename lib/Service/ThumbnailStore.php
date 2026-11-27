@@ -16,6 +16,8 @@ use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
+use OCP\Server;
+use Psr\Log\LoggerInterface;
 
 /**
  * Stores one JPEG per file ID in app data, sharded as thumbs/{id % 100}/{(id / 100) % 100}/{id}.jpg
@@ -27,6 +29,7 @@ class ThumbnailStore {
 	public function __construct(
 		private IAppData $appData,
 		private IRootFolder $rootFolder,
+		private LoggerInterface $logger,
 	) {
 	}
 
@@ -53,13 +56,20 @@ class ThumbnailStore {
 		} else {
 			$folder->newFile($name, $data);
 		}
+		$this->forgetServerPreviews($fileId);
 	}
 
 	public function delete(int $fileId): void {
 		$this->get($fileId)?->delete();
 	}
 
+	/**
+	 * Removes every stored thumbnail and the previews Nextcloud made from them.
+	 */
 	public function deleteAll(): void {
+		foreach (iterator_to_array($this->allFileIds(), false) as $fileId) {
+			$this->forgetServerPreviews($fileId);
+		}
 		try {
 			$this->appData->getFolder(self::ROOT)->delete();
 		} catch (NotFoundException) {
@@ -96,6 +106,22 @@ class ThumbnailStore {
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * Nextcloud keeps its own copies of the previews it made from a thumbnail and would go on serving
+	 * them. Its preview watcher drops them, as it does when a file changes. Internal API, the same in
+	 * Nextcloud 31 to 34; should it change, a replaced thumbnail just shows up late.
+	 */
+	private function forgetServerPreviews(int $fileId): void {
+		try {
+			$node = $this->rootFolder->getFirstNodeById($fileId);
+			if ($node !== null) {
+				Server::get(\OC\Preview\Watcher::class)->postWrite($node);
+			}
+		} catch (\Throwable $e) {
+			$this->logger->warning('Could not drop cached previews of file ' . $fileId, ['exception' => $e]);
 		}
 	}
 

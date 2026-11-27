@@ -17,7 +17,7 @@ Your browser can only render videos it can play. Depending on the browser, HEVC,
 **Features**
 
 - Uses only the public Nextcloud API. No FFmpeg is needed on the server, and no extra machine.
-- Accepts only JPEG images up to 5 MB, and only for video files the uploading user can access.
+- Accepts only JPEG images up to 16 MB, and only for video files the uploading user can access.
 - Protects the worker API with an optional shared secret, set in **Administration settings → Additional settings**.
 - Deletes thumbnails automatically when their video is permanently deleted, and deletes all stored data when the app is uninstalled.
 

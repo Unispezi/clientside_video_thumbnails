@@ -29,6 +29,7 @@ class Admin implements ISettings {
 		return new TemplateResponse(Application::APP_ID, 'admin', [
 			'secretSet' => $this->secret->isSet(),
 			'secretUrl' => $this->urlGenerator->linkToRoute(Application::APP_ID . '.settings.regenerateSecret'),
+			'deleteAllUrl' => $this->urlGenerator->linkToRoute(Application::APP_ID . '.thumbnail.deleteAll'),
 			'apiBase' => $this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID . '/thumbnail'),
 		]);
 	}

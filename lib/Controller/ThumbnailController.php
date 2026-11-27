@@ -25,7 +25,7 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class ThumbnailController extends Controller {
-	private const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+	private const MAX_UPLOAD_BYTES = 16 * 1024 * 1024;
 	private const MAX_BATCH = 500;
 
 	public function __construct(
@@ -58,7 +58,7 @@ class ThumbnailController extends Controller {
 			return $this->error('No thumbnail uploaded', Http::STATUS_BAD_REQUEST);
 		}
 		if (($upload['size'] ?? 0) > self::MAX_UPLOAD_BYTES) {
-			return $this->error('Thumbnail larger than 5 MB', Http::STATUS_REQUEST_ENTITY_TOO_LARGE);
+			return $this->error('Thumbnail larger than 16 MB', Http::STATUS_REQUEST_ENTITY_TOO_LARGE);
 		}
 		$info = @getimagesize($upload['tmp_name']);
 		if ($info === false || $info[2] !== IMAGETYPE_JPEG) {

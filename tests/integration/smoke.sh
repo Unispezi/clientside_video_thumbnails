@@ -140,6 +140,17 @@ occ trashbin:cleanup "$NC_ADMIN" >/dev/null
 occ background-job:execute --force-execute "$job" >/dev/null
 check "thumbnail removed after trash emptied" gone "$(appdata_thumb)"
 
+echo "== replacing and deleting thumbnails"
+preview_sum() { admin "$NC_BASE/index.php/core/preview?fileId=$fid&x=64&y=64&a=1" | md5sum | cut -d' ' -f1; }
+code -F path=/vtr-test/sample.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload" >/dev/null
+first="$(preview_sum)"
+check "replacement thumbnail accepted" 200 "$(code -F path=/vtr-test/sample.mp4 -F "thumbnail=@$FIX/thumb-red.jpg" "$API/upload")"
+check "preview shows the replacement, not Nextcloud's cached copy" 1 "$([[ "$(preview_sum)" != "$first" ]] && echo 1 || echo 0)"
+check "deleteAll accepted" 200 "$(code -X POST "$API/deleteAll")"
+check "has-preview false after deleteAll" false "$(has_preview vtr-test/sample.mp4)"
+code -F path=/vtr-test/sample.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload" >/dev/null
+check "after deleteAll a new upload is served, not Nextcloud's cached copy" "$first" "$(preview_sum)"
+
 if [[ "${WORKER:-0}" == 1 ]]; then
 	echo "== worker"
 	admin -T "$FIX/sample.mp4" "$DAV/vtr-test/worker.mp4" -o /dev/null

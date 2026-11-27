@@ -15,3 +15,11 @@
 	margin-inline-start: 8px;
 	color: var(--color-error-text, var(--color-error));
 }
+
+#clientside-video-thumbnails-admin h3 {
+	margin-top: 24px;
+}
+
+#clientside-video-thumbnails-admin .msg.ok {
+	color: var(--color-success-text, var(--color-success));
+}

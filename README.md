@@ -11,7 +11,8 @@ There are up to three parts:
 ## How the browser script works
 
 - It only looks at rows currently on screen in the "All files" view, one video at a time.
-- It reads the video with a `<video>` element. The browser fetches only the parts it needs via HTTP range requests (the index and the data around second 1), not the whole file.
+- It takes the same frame Nextcloud's own video previews (ffmpeg) would: at 5 seconds, at 1 second for shorter videos, else the first. It keeps the full resolution up to 4096 pixels; the server scales it down for every smaller preview.
+- It reads the video with a `<video>` element. The browser fetches only the parts it needs via HTTP range requests (the index and the data around the frame it needs), not the whole file.
 - With the browser's data saver on (`navigator.connection.saveData`, Chrome and Android), it renders nothing.
 - On mobile: if the browser ignores `preload` (iOS Safari), the script briefly starts muted playback to get the video loading. Before drawing it waits for the decoded frame (`requestVideoFrameCallback`), so mobile browsers don't hand out a black image.
 - Videos the browser can't decode (often HEVC, MKV, AVI, depending on browser) are remembered in `localStorage` and not retried for 30 days. Use the worker for those.
@@ -22,6 +23,12 @@ It relies on markup that is the same in Nextcloud 31 to 34: list rows carry `dat
 ## Find and fix mode
 
 Under **Personal settings → Video thumbnails → Find and fix videos without thumbnail**, one DAV search finds all your videos without a preview, in every folder. The page then renders and uploads a frame for each, one at a time, with progress and a list of the videos that failed. Keep the page open until it is done; on phones it asks the browser to keep the screen on. Tick **Also retry videos this browser could not render before** to ignore the failure cache, for example after switching to a browser with more codecs.
+
+## Starting over
+
+For testing, **Administration settings → Additional settings → Clientside Video Thumbnails → Delete all video thumbnails** removes every thumbnail of all users, along with the previews Nextcloud made from them, and clears the failure cache of the browser you click it in. Videos get new thumbnails the next time they show up in Files or in find-and-fix mode.
+
+`tests/vps/deploy.sh` puts a test instance on a server of your own over SSH; see the comment at its top.
 
 ## Getting started
 

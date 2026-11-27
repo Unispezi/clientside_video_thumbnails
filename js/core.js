@@ -18,8 +18,11 @@
 	const METADATA_KICK_MS = 3000
 	/** How long to wait for the decoded frame after seeking before drawing anyway */
 	const FRAME_CALLBACK_MS = 1000
-	const MAX_EDGE = 1024
-	const JPEG_QUALITY = 0.85
+	// Same frame and size as Nextcloud's own video previews (lib/private/Preview/Movie.php): the frame at
+	// 5 s, or 1 s, or the first one for shorter videos; full resolution up to the largest preview size
+	// (preview_max_x/y, 4096 by default). The server scales it down for every smaller size.
+	const MAX_EDGE = 4096
+	const JPEG_QUALITY = 0.9
 
 	// ---- failure cache: videos this browser can't decode are not retried for a while ----
 
@@ -141,7 +144,7 @@
 				}
 				video.pause()
 				const duration = Number.isFinite(video.duration) ? video.duration : 0
-				video.currentTime = Math.min(1, duration * 0.1) || 0.1
+				video.currentTime = duration > 5 ? 5 : duration > 1 ? 1 : 0
 			}, { once: true })
 			video.addEventListener('seeked', () => {
 				if (done) {

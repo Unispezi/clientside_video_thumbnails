@@ -12,10 +12,13 @@ Forked from [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs
 - A find-and-fix mode in the personal settings: finds all videos without a preview and renders them in the browser, with progress and a list of failures.
 - Support for Nextcloud 34.
 - Mobile browsers: muted playback kick-off when iOS Safari ignores `preload`, waiting for the decoded frame before drawing, and no rendering while the data saver is on.
+- Admin settings: a button that deletes all video thumbnails, for testing.
 
 ### Changed
 - New app ID `clientside_video_thumbnails`, API path `/apps/clientside_video_thumbnails/thumbnail/…` and secret header `X-ClientsideVideoThumbnails-Secret`.
 - Browser sessions signed in through the login page can use the API without the secret, as long as they pass the CSRF check. Clients with an Authorization header, such as the worker, still need it.
+- Thumbnails may be up to 16 MB, for frames in full resolution.
+- A new thumbnail for a video, and deleting all thumbnails, also drop the previews Nextcloud made from the old one. Before, Nextcloud went on serving those.
 
 ## 1.0.0 - 2026-10-12
 
