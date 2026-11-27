@@ -22,6 +22,8 @@ class Admin implements ISettings {
 	}
 
 	public function getForm(): TemplateResponse {
+		// Translations for the scripts; templates get theirs anyway
+		Util::addTranslations(Application::APP_ID);
 		Util::addScript(Application::APP_ID, 'admin');
 		Util::addStyle(Application::APP_ID, 'admin');
 		return new TemplateResponse(Application::APP_ID, 'admin', [

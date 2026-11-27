@@ -38,6 +38,10 @@ For testing, **Administration settings → Additional settings → Clientside Vi
 1. Install **Clientside Video Thumbnails** from the Apps page of your Nextcloud.
 2. Open a folder with videos in Files. That's it.
 
+## Translations
+
+German is included, informal (`de`) and formal (`de_DE`), in `l10n/`. Texts go through `$l->t()` in the templates and `t()`/`n()` in the scripts.
+
 ## Development
 
 ```sh

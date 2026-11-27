@@ -33,6 +33,8 @@ class Personal implements ISettings {
 		if ($user !== null) {
 			$this->initialState->provideInitialState('preferences', $this->preferences->get($user->getUID()));
 		}
+		// Translations for the scripts; templates get theirs anyway
+		Util::addTranslations(Application::APP_ID);
 		Util::addScript(Application::APP_ID, 'core');
 		Util::addScript(Application::APP_ID, 'personal');
 		Util::addStyle(Application::APP_ID, 'personal');

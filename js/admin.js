@@ -5,7 +5,7 @@
 (function() {
 	'use strict'
 
-	const translate = (text, vars) => (typeof window.t === 'function' ? window.t('clientside_video_thumbnails', text, vars) : text.replace(/{(\w+)}/g, (m, k) => (vars && k in vars ? vars[k] : m)))
+	const translate = (text, vars) => (typeof window.t === 'function' ? window.t('clientside_video_thumbnails', text, vars, undefined, { escape: false }) : text.replace(/{(\w+)}/g, (m, k) => (vars && k in vars ? vars[k] : m)))
 
 	function init() {
 		const root = document.getElementById('clientside-video-thumbnails-admin')

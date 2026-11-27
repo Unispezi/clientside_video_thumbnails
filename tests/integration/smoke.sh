@@ -94,6 +94,13 @@ check "video search leaves out other files" 0 "$(grep -c 'notes.txt' <<<"$search
 check "session upload without request token rejected" 412 \
 	"$(browser -F path=/vtr-test/sample.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload")"
 
+echo "== German"
+occ user:setting "$NC_ADMIN" core lang de >/dev/null
+german="$(curl -s -b "$jar" "$NC_BASE/index.php/settings/user/$APP")"
+check "settings page in German" 1 "$(grep -q 'Fehlende Vorschaubilder erzeugen' <<<"$german" && echo 1 || echo 0)"
+check "German translations for the scripts loaded" 1 "$(grep -q "$APP/l10n/de" <<<"$german" && echo 1 || echo 0)"
+occ user:setting "$NC_ADMIN" core lang en >/dev/null
+
 echo "== preferences"
 prefs() { admin -X PUT -H 'Content-Type: application/json' -d "$1" "$NC_BASE/index.php/apps/$APP/preferences"; }
 check "switch saved" '"wifi_only":true' "$(prefs '{"key":"wifi_only","value":true}' | grep -oE '"wifi_only":(true|false)')"

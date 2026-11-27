@@ -14,9 +14,9 @@
 	}
 	const { APP_ID, isFailed, markFailed, clearFailed, currentUser, requestToken, webroot, saveData, getPreferences, setPreference, onWifi, isCharging, onConditionsChange, davUrl, renderFrame, upload } = core
 
-	const translate = (text, vars) => (typeof window.t === 'function' ? window.t(APP_ID, text, vars) : text.replace(/{(\w+)}/g, (m, k) => (vars && k in vars ? vars[k] : m)))
+	const translate = (text, vars) => (typeof window.t === 'function' ? window.t(APP_ID, text, vars, undefined, { escape: false }) : text.replace(/{(\w+)}/g, (m, k) => (vars && k in vars ? vars[k] : m)))
 	const translatePlural = (singular, plural, count, vars) => (typeof window.n === 'function'
-		? window.n(APP_ID, singular, plural, count, vars)
+		? window.n(APP_ID, singular, plural, count, vars, { escape: false })
 		: translate(count === 1 ? singular : plural, { count, ...vars }))
 
 	const NS = {

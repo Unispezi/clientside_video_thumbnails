@@ -1,0 +1,63 @@
+{
+    "translations": {
+        "Automatically generate video thumbnails": "Video-Vorschaubilder automatisch erzeugen",
+        "Clientside Video Thumbnails": "Clientside Video Thumbnails",
+        "Could not save: {reason}": "Speichern fehlgeschlagen: {reason}",
+        "Create missing thumbnails": "Fehlende Vorschaubilder erzeugen",
+        "Data saver is on.": "Datensparmodus ist an.",
+        "Delete ALL my thumbnails": "ALLE meine Vorschaubilder löschen",
+        "Delete ALL thumbnails of all users": "ALLE Vorschaubilder aller Nutzer löschen",
+        "Delete all my thumbnails": "Alle meine Vorschaubilder löschen",
+        "Delete all thumbnails of all users": "Alle Vorschaubilder aller Nutzer löschen",
+        "Delete all video thumbnails of all users?": "Alle Video-Vorschaubilder aller Nutzer löschen?",
+        "Delete the thumbnails of all your videos?": "Die Vorschaubilder all deiner Videos löschen?",
+        "Deleted.": "Gelöscht.",
+        "Deletes ALL existing video thumbnails. They will be regenerated the next time the video is listed.": "Löscht ALLE vorhandenen Video-Vorschaubilder. Sie werden neu erzeugt, sobald das Video wieder in einer Liste erscheint.",
+        "Deletes ALL video thumbnails of all users. They will be regenerated the next time a video is listed.": "Löscht ALLE Video-Vorschaubilder aller Nutzer. Sie werden neu erzeugt, sobald ein Video wieder in einer Liste erscheint.",
+        "Find and fix videos without thumbnail": "Videos ohne Vorschaubild finden und reparieren",
+        "Finished.": "Fertig.",
+        "Generate video thumbnails when videos are listed. This will download a part of the video and upload the thumbnail, so it uses some battery and network traffic.": "Erzeugt Vorschaubilder, sobald Videos in einer Liste erscheinen. Dafür wird ein Teil des Videos heruntergeladen und das Vorschaubild hochgeladen. Das kostet etwas Akku und Datenvolumen.",
+        "Mobile device: only on Wi-Fi": "Mobilgerät: nur im WLAN",
+        "Mobile device: only while charging": "Mobilgerät: nur beim Laden",
+        "No videos found.": "Keine Videos gefunden.",
+        "Not charging. Rendering many videos drains the battery.": "Gerät lädt nicht. Viele Videos leeren den Akku.",
+        "Not signed in.": "Nicht angemeldet.",
+        "Only the first {count} videos were searched.": "Nur die ersten {count} Videos wurden durchsucht.",
+        "Request failed ({status})": "Anfrage fehlgeschlagen ({status})",
+        "Retry videos with errors": "Videos mit Fehlern erneut versuchen",
+        "Search failed ({status})": "Suche fehlgeschlagen ({status})",
+        "Searches all your files for videos without a preview and renders one in this browser. Keep this page open until it is done. Each video costs a few MB of data.": "Durchsucht alle deine Dateien nach Videos ohne Vorschaubild und erzeugt eins in diesem Browser. Lass diese Seite offen, bis es fertig ist. Jedes Video kostet ein paar MB Datenvolumen.",
+        "Searching for videos…": "Suche Videos …",
+        "Stop": "Stopp",
+        "Stopped.": "Gestoppt.",
+        "This device: {network}, {battery}.": "Dieses Gerät: {network}, {battery}.",
+        "Video previews are rendered in the browser of whoever opens a folder in Files, and uploaded to this server. Videos the browser can't play stay without a preview.": "Video-Vorschaubilder erzeugt der Browser, in dem jemand einen Ordner in Dateien öffnet, und lädt sie auf diesen Server. Videos, die der Browser nicht abspielen kann, bleiben ohne Vorschaubild.",
+        "You are on mobile data. Each video costs a few MB.": "Du bist im Mobilfunknetz. Jedes Video kostet ein paar MB.",
+        "_{count} skipped because this browser could not render it before._::_{count} skipped because this browser could not render them before._": [
+            "{count} übersprungen, weil dieser Browser es vorher nicht rendern konnte.",
+            "{count} übersprungen, weil dieser Browser sie vorher nicht rendern konnte."
+        ],
+        "_{count} thumbnail deleted._::_{count} thumbnails deleted._": [
+            "{count} Vorschaubild gelöscht.",
+            "{count} Vorschaubilder gelöscht."
+        ],
+        "_{count} video without thumbnail_::_{count} videos without thumbnail_": [
+            "{count} Video ohne Vorschaubild",
+            "{count} Videos ohne Vorschaubild"
+        ],
+        "_{count} video, it has a thumbnail._::_{count} videos, all have a thumbnail._": [
+            "{count} Video, es hat ein Vorschaubild.",
+            "{count} Videos, alle haben ein Vorschaubild."
+        ],
+        "cannot render: {reason}": "Rendern fehlgeschlagen: {reason}",
+        "charging": "lädt",
+        "charging state unknown": "Ladezustand unbekannt",
+        "network type unknown": "Netzwerk unbekannt",
+        "on Wi-Fi or Ethernet": "im WLAN oder per Kabel",
+        "on battery": "im Akkubetrieb",
+        "on mobile data": "im Mobilfunknetz",
+        "upload failed: {reason}": "Hochladen fehlgeschlagen: {reason}",
+        "{videos} videos, {missing} without thumbnail. Done: {done} of {todo}, failed: {failed}.": "{videos} Videos, {missing} ohne Vorschaubild. Erledigt: {done} von {todo}, fehlgeschlagen: {failed}."
+    },
+    "pluralForm": "nplurals=2; plural=(n != 1);"
+}

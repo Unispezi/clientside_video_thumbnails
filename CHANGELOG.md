@@ -17,6 +17,7 @@ Forked from [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs
 - Find and fix warns on mobile data, with the data saver on or on battery.
 - Copies of a video, also inside copied folders, get its thumbnail.
 - Admin settings: a button that deletes all video thumbnails, for testing.
+- German translation, informal and formal.
 
 ### Changed
 - New app ID `clientside_video_thumbnails`, upload path `/apps/clientside_video_thumbnails/thumbnail/upload`.
