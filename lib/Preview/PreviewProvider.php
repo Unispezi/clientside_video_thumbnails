@@ -18,7 +18,7 @@ use OCP\Preview\IProviderV2;
 use Psr\Log\LoggerInterface;
 
 /**
- * Serves thumbnails uploaded by the worker as previews for video files.
+ * Serves thumbnails uploaded by the browser as previews for video files.
  */
 class PreviewProvider implements IProviderV2 {
 	public const MIME_REGEX = '/^video\/.*/';

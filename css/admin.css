@@ -1,23 +1,14 @@
 /**
- * SPDX-FileCopyrightText: 2026 silversong88
+ * SPDX-FileCopyrightText: 2026 silversong88, Unispezi
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-#clientside-video-thumbnails-admin code {
-	user-select: all;
-}
-
-#clientside-video-thumbnails-admin .vtr-new-secret input {
-	width: min(100%, 520px);
-	font-family: var(--font-face-monospace, monospace);
+#clientside-video-thumbnails-admin h3 {
+	margin-top: 24px;
 }
 
 #clientside-video-thumbnails-admin .msg {
 	margin-inline-start: 8px;
 	color: var(--color-error-text, var(--color-error));
-}
-
-#clientside-video-thumbnails-admin h3 {
-	margin-top: 24px;
 }
 
 #clientside-video-thumbnails-admin .msg.ok {

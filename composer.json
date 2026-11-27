@@ -16,7 +16,7 @@
 		"vimeo/psalm": "^7.17"
 	},
 	"scripts": {
-		"lint": "find . -name '*.php' -not -path './vendor/*' -not -path './worker/*' -print0 | xargs -0 -n1 php -l",
+		"lint": "find . -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
 		"psalm": "psalm --no-cache"
 	},
 	"config": {

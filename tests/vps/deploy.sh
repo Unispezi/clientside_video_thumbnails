@@ -79,7 +79,7 @@ ssh "$HOST" "for _ in \$(seq 1 150); do curl -sf http://localhost:$PORT/status.p
 	cd ~/cvt-test && docker compose logs --tail 30; exit 1"
 
 # Tracked files of the working tree, without what the app does not need at runtime
-(cd "$APP_DIR" && git ls-files | grep -vE '^(tests|worker|\.github)/' | tar -cf - -T -) |
+(cd "$APP_DIR" && git ls-files | grep -vE '^(tests|\.github)/' | tar -cf - -T -) |
 	ssh "$HOST" "cd ~/cvt-test && docker compose exec -T nextcloud sh -c '
 		rm -rf custom_apps/$APP && mkdir -p custom_apps/$APP &&
 		tar -C custom_apps/$APP -xf - &&

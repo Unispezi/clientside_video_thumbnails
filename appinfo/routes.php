@@ -10,10 +10,6 @@ declare(strict_types=1);
 return [
 	'routes' => [
 		['name' => 'thumbnail#upload', 'url' => '/thumbnail/upload', 'verb' => 'POST'],
-		['name' => 'thumbnail#exists', 'url' => '/thumbnail/exists', 'verb' => 'GET'],
-		['name' => 'thumbnail#batchExists', 'url' => '/thumbnail/batchExists', 'verb' => 'POST'],
 		['name' => 'thumbnail#deleteAll', 'url' => '/thumbnail/deleteAll', 'verb' => 'POST'],
-		['name' => 'settings#regenerateSecret', 'url' => '/settings/secret', 'verb' => 'POST'],
-		['name' => 'settings#clearSecret', 'url' => '/settings/secret', 'verb' => 'DELETE'],
 	],
 ];

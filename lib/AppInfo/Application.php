@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OCA\ClientsideVideoThumbnails\AppInfo;
 
-use OCA\ClientsideVideoThumbnails\Capabilities;
 use OCA\ClientsideVideoThumbnails\Listener\LoadFilesScript;
 use OCA\ClientsideVideoThumbnails\Preview\PreviewProvider;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
@@ -26,7 +25,6 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function register(IRegistrationContext $context): void {
-		$context->registerCapability(Capabilities::class);
 		$context->registerPreviewProvider(PreviewProvider::class, PreviewProvider::MIME_REGEX);
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadFilesScript::class);
 	}

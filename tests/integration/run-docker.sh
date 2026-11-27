@@ -4,7 +4,6 @@
 #
 # Starts a throwaway Nextcloud container, enables the app and runs smoke.sh.
 #   tests/integration/run-docker.sh <nextcloud-major> [port]
-# Set WORKER=1 to include the worker test (needs node + ffmpeg and `npm ci` in worker/).
 # Set KEEP=1 to leave the container running afterwards.
 
 set -euo pipefail
@@ -37,7 +36,7 @@ curl -sf "http://localhost:$PORT/status.php" | grep -q '"installed":true' || { d
 
 # Copied in after install: mounting into custom_apps makes it root-owned, which breaks the installer on Nextcloud 31
 docker exec "$NAME" sh -c 'mkdir -p /var/www/html/custom_apps/clientside_video_thumbnails &&
-	tar -C /opt/clientside_video_thumbnails --exclude=./vendor --exclude=./worker --exclude=./tests --exclude=./.git -cf - . |
+	tar -C /opt/clientside_video_thumbnails --exclude=./vendor --exclude=./tests --exclude=./.git -cf - . |
 	tar -C /var/www/html/custom_apps/clientside_video_thumbnails -xf - &&
 	chown -R www-data:www-data /var/www/html/custom_apps'
 
@@ -45,11 +44,10 @@ OCC="docker exec -u www-data $NAME php occ"
 $OCC app:enable clientside_video_thumbnails
 $OCC app:disable firstrunwizard >/dev/null 2>&1 || true
 
-# The web server's route and capability caches only pick up an app enabled via occ after a short delay
+# The web server's route cache only picks up an app enabled via occ after a short delay
 echo "Waiting for the app's routes..."
 for _ in $(seq 1 60); do
-	if curl -s -u "admin:$PASS" -H 'OCS-APIRequest: true' "http://localhost:$PORT/index.php/apps/clientside_video_thumbnails/thumbnail/exists?path=/x" | grep -q '"exists"' &&
-		curl -s -u "admin:$PASS" -H 'OCS-APIRequest: true' "http://localhost:$PORT/ocs/v2.php/cloud/capabilities?format=json" | grep -q '"clientside_video_thumbnails"'; then
+	if curl -s -u "admin:$PASS" -H 'OCS-APIRequest: true' -F path=/x "http://localhost:$PORT/index.php/apps/clientside_video_thumbnails/thumbnail/upload" | grep -q 'Not a video file'; then
 		break
 	fi
 	sleep 2

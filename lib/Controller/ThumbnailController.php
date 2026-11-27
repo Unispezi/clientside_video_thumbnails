@@ -9,13 +9,10 @@ declare(strict_types=1);
 
 namespace OCA\ClientsideVideoThumbnails\Controller;
 
-use OCA\ClientsideVideoThumbnails\Service\SecretService;
 use OCA\ClientsideVideoThumbnails\Service\ThumbnailStore;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\Attribute\BruteForceProtection;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\Files\File;
 use OCP\Files\IRootFolder;
@@ -26,7 +23,6 @@ use Psr\Log\LoggerInterface;
 
 class ThumbnailController extends Controller {
 	private const MAX_UPLOAD_BYTES = 16 * 1024 * 1024;
-	private const MAX_BATCH = 500;
 
 	public function __construct(
 		string $appName,
@@ -34,20 +30,17 @@ class ThumbnailController extends Controller {
 		private IRootFolder $rootFolder,
 		private IUserSession $userSession,
 		private ThumbnailStore $store,
-		private SecretService $secret,
 		private LoggerInterface $logger,
 	) {
 		parent::__construct($appName, $request);
 	}
 
+	/**
+	 * Stores the thumbnail for one of the signed-in user's videos. Browsers send their request
+	 * token; Nextcloud's usual CSRF check applies.
+	 */
 	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	#[BruteForceProtection(action: 'clientside_video_thumbnails_secret')]
 	public function upload(string $path): JSONResponse {
-		if (!$this->secretOk()) {
-			return $this->invalidSecret();
-		}
-
 		$file = $this->resolveVideo($path);
 		if ($file === null) {
 			return $this->error('Not a video file you can access: ' . $path, Http::STATUS_NOT_FOUND);
@@ -85,73 +78,12 @@ class ThumbnailController extends Controller {
 		return new JSONResponse(['status' => 'success', 'fileId' => $file->getId()]);
 	}
 
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	#[BruteForceProtection(action: 'clientside_video_thumbnails_secret')]
-	public function exists(string $path): JSONResponse {
-		if (!$this->secretOk()) {
-			return $this->invalidSecret();
-		}
-		$file = $this->resolveVideo($path);
-		return new JSONResponse(['exists' => $file !== null && $this->store->exists($file->getId())]);
-	}
-
 	/**
-	 * @param list<string> $paths
+	 * Admin only (no NoAdminRequired): deletes all thumbnails, for testing.
 	 */
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	#[BruteForceProtection(action: 'clientside_video_thumbnails_secret')]
-	public function batchExists(array $paths = []): JSONResponse {
-		if (!$this->secretOk()) {
-			return $this->invalidSecret();
-		}
-		if (count($paths) > self::MAX_BATCH) {
-			return $this->error('At most ' . self::MAX_BATCH . ' paths per request', Http::STATUS_BAD_REQUEST);
-		}
-
-		$results = [];
-		foreach ($paths as $path) {
-			if (!is_string($path)) {
-				continue;
-			}
-			$file = $this->resolveVideo($path);
-			$results[ltrim($path, '/')] = $file !== null && $this->store->exists($file->getId());
-		}
-		return new JSONResponse(['status' => 'success', 'results' => $results]);
-	}
-
-	/**
-	 * Admin only: removes every stored thumbnail.
-	 */
-	#[NoCSRFRequired]
-	#[BruteForceProtection(action: 'clientside_video_thumbnails_secret')]
 	public function deleteAll(): JSONResponse {
-		if (!$this->secretOk()) {
-			return $this->invalidSecret();
-		}
 		$this->store->deleteAll();
-		return new JSONResponse(['status' => 'success', 'message' => 'All thumbnails deleted']);
-	}
-
-	/**
-	 * Clients with credentials in the Authorization header (the worker) prove themselves with the
-	 * secret header. A browser session signed in through the login page (the Files app script)
-	 * needs no secret, as long as it passes the CSRF check.
-	 *
-	 * passesCSRFCheck() alone is not enough: it also accepts any request with an OCS-APIRequest header.
-	 */
-	private function secretOk(): bool {
-		if ($this->request->getHeader('Authorization') === '' && $this->request->passesCSRFCheck()) {
-			return true;
-		}
-		return $this->secret->verify($this->request->getHeader(SecretService::HEADER));
-	}
-
-	private function invalidSecret(): JSONResponse {
-		$response = $this->error('Invalid secret', Http::STATUS_UNAUTHORIZED);
-		$response->throttle(['action' => 'clientside_video_thumbnails_secret']);
-		return $response;
+		return new JSONResponse(['status' => 'success']);
 	}
 
 	private function error(string $message, int $status): JSONResponse {

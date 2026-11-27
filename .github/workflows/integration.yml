@@ -31,21 +31,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 22
-
-      - name: Install ffmpeg
-        run: sudo apt-get update -q && sudo apt-get install -y -q ffmpeg
-
-      - name: Install worker dependencies
-        working-directory: worker
-        run: npm ci --omit=dev
-
       - name: Run integration tests
-        env:
-          WORKER: '1'
         run: tests/integration/run-docker.sh ${{ matrix.nextcloud }}
 
   summary:

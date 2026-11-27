@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2026 Unispezi
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Monthly pull requests for new versions of the pinned actions, the worker's npm packages and the
-# Composer dev tools. The app itself ships no third-party code.
+# Monthly pull requests for new versions of the pinned actions and the Composer dev tools. The app itself ships no third-party code.
 # Security fixes come independently of this schedule (Dependabot security updates, repo settings).
 version: 2
 updates:
@@ -13,10 +12,6 @@ updates:
     groups:
       actions:
         patterns: ["*"]
-  - package-ecosystem: npm
-    directory: /worker
-    schedule:
-      interval: monthly
   - package-ecosystem: composer
     directory: /
     schedule:

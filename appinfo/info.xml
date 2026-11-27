@@ -12,18 +12,18 @@
 2. For each of them it loads just enough of the video to grab one frame, shows it right away and uploads it as a JPEG.
 3. This app stores those thumbnails and serves them as native Nextcloud previews from then on. You see them in Files, Photos, shares and the mobile apps.
 
-Your browser can only render videos it can play. Depending on the browser, HEVC, MKV or AVI files may stay without a preview. For those, an optional Node.js worker with FFmpeg can run on a machine you control; see the repository's `worker/` folder.
+Your browser can only render videos it can play. Depending on the browser, HEVC, MKV or AVI files may stay without a preview.
 
 **Features**
 
 - Uses only the public Nextcloud API. No FFmpeg is needed on the server, and no extra machine.
 - Accepts only JPEG images up to 16 MB, and only for video files the uploading user can access.
-- Protects the worker API with an optional shared secret, set in **Administration settings → Additional settings**.
+- Finds and fixes all of your videos without a preview at once, under **Personal settings → Video thumbnails**.
 - Deletes thumbnails automatically when their video is permanently deleted, and deletes all stored data when the app is uninstalled.
 
 **Privacy**
 
-The app sends no data to third parties. Videos are read and thumbnails uploaded by your own browser or worker, with your own Nextcloud login.
+The app sends no data to third parties. Videos are read and thumbnails uploaded by your own browser, with your own Nextcloud login.
 
 This app is a fork of [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs_relay) by silversong88, which in turn is a fork of [localthumbs](https://github.com/hersche/nc-local-thumbnailer) by Vinzenz Hersche.]]></description>
     <version>1.1.0</version>

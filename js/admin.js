@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: 2026 silversong88
+ * SPDX-FileCopyrightText: 2026 silversong88, Unispezi
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 (function() {
@@ -12,48 +12,16 @@
 		if (!root) {
 			return
 		}
-		const url = root.dataset.secretUrl
-		const generate = document.getElementById('vtr-generate')
-		const clear = document.getElementById('vtr-clear')
-		const status = document.getElementById('vtr-status')
-		const box = document.getElementById('vtr-new-secret')
-		const value = document.getElementById('vtr-secret-value')
-		const message = document.getElementById('vtr-message')
-
-		async function call(method) {
-			message.textContent = ''
-			const response = await fetch(url, {
-				method,
-				headers: { requesttoken: document.head.dataset.requesttoken, Accept: 'application/json' },
-			})
-			if (!response.ok) {
-				throw new Error(translate('Request failed ({status})', { status: response.status }))
-			}
-			return response.json()
-		}
-
-		generate.addEventListener('click', async () => {
-			try {
-				const data = await call('POST')
-				value.value = data.secret
-				box.classList.remove('hidden')
-				value.select()
-				clear.disabled = false
-				status.textContent = translate('A secret is set. API requests without it are rejected, except from signed-in browser sessions.')
-			} catch (e) {
-				message.textContent = e.message
-			}
-		})
-
 		const deleteAll = document.getElementById('cvt-delete-all')
-		const deleteAllMessage = document.getElementById('cvt-delete-all-message')
+		const message = document.getElementById('cvt-delete-all-message')
+
 		deleteAll.addEventListener('click', async () => {
 			if (!window.confirm(translate('Delete all video thumbnails of all users?'))) {
 				return
 			}
 			deleteAll.disabled = true
-			deleteAllMessage.textContent = ''
-			deleteAllMessage.classList.remove('ok')
+			message.textContent = ''
+			message.classList.remove('ok')
 			try {
 				const response = await fetch(root.dataset.deleteAllUrl, {
 					method: 'POST',
@@ -64,24 +32,12 @@
 				}
 				// This browser's list of videos it could not render, so that it tries them again too
 				localStorage.removeItem('clientside_video_thumbnails.failed')
-				deleteAllMessage.textContent = translate('Deleted.')
-				deleteAllMessage.classList.add('ok')
-			} catch (e) {
-				deleteAllMessage.textContent = e.message
-			} finally {
-				deleteAll.disabled = false
-			}
-		})
-
-		clear.addEventListener('click', async () => {
-			try {
-				await call('DELETE')
-				box.classList.add('hidden')
-				value.value = ''
-				clear.disabled = true
-				status.textContent = translate('No secret is set. Any signed-in user or app password can upload thumbnails for their own videos.')
+				message.textContent = translate('Deleted.')
+				message.classList.add('ok')
 			} catch (e) {
 				message.textContent = e.message
+			} finally {
+				deleteAll.disabled = false
 			}
 		})
 	}
