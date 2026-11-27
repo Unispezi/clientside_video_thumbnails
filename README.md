@@ -59,6 +59,8 @@ CI runs the same checks on every push and pull request: info.xml validation, PHP
 
 ## Credits
 
+Many thanks to silversong88 and Vinzenz Hersche, without whose work this app would not exist.
+
 This is a fork of [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs_relay) by silversong88, which in turn builds on the work of Vinzenz Hersche:
 
 - Nextcloud app: https://github.com/hersche/nc-local-thumbnailer (App Store ID `localthumbs`)

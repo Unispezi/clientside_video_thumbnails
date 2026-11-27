@@ -28,6 +28,10 @@ Es ist dasselbe Einzelbild, das Nextcloud selbst nehmen würde: bei 5 Sekunden, 
 
 **Videos, die der Browser nicht abspielen kann.** Dein Browser kann nur Videos rendern, die er abspielen kann. Je nach Browser und Gerät bleiben HEVC (H.265), MKV oder AVI ohne Vorschaubild. Ein anderer Browser schafft sie vielleicht: Safari spielt zum Beispiel HEVC.
 
+## Danke
+
+Diese App baut auf der Arbeit anderer auf. Herzlichen Dank an **Vinzenz Hersche** für [localthumbs](https://github.com/hersche/nc-local-thumbnailer), die Idee, anderswo erzeugte Vorschaubilder als Nextcloud-Vorschau auszuliefern, und an **silversong88** für [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs_relay), aus dem diese App hervorgegangen ist.
+
 ## Links
 
 - [Quellcode und Fehlermeldungen](https://github.com/Unispezi/clientside_video_thumbnails)

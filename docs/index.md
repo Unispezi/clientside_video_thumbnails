@@ -25,6 +25,10 @@ The frame is the same one Nextcloud itself would take: at 5 seconds, or at 1 sec
 
 **Videos the browser can't play.** Your browser can only render videos it can play. Depending on browser and device, HEVC (H.265), MKV or AVI files may stay without a preview. Another browser may manage them: Safari plays HEVC, for example.
 
+## Thanks
+
+This app stands on the shoulders of others. Many thanks to **Vinzenz Hersche** for [localthumbs](https://github.com/hersche/nc-local-thumbnailer), the idea of serving thumbnails made elsewhere as Nextcloud previews, and to **silversong88** for [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs_relay), which this app is forked from.
+
 ## Links
 
 - [Source code and issues](https://github.com/Unispezi/clientside_video_thumbnails)
