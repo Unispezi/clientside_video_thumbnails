@@ -13,7 +13,7 @@ OC.L10N.register(
         "Delete all video thumbnails of all users?": "Alle Video-Vorschaubilder aller Nutzer löschen?",
         "Delete the thumbnails of all your videos?": "Die Vorschaubilder all deiner Videos löschen?",
         "Deleted.": "Gelöscht.",
-        "Deletes ALL existing video thumbnails. They will be regenerated the next time the video is listed.": "Löscht ALLE vorhandenen Video-Vorschaubilder. Sie werden neu erzeugt, sobald das Video wieder in einer Liste erscheint.",
+        "Deletes ALL thumbnails of your videos. They will be regenerated the next time a video is listed.": "Löscht ALLE Vorschaubilder deiner Videos. Sie werden neu erzeugt, sobald ein Video wieder in einer Liste erscheint.",
         "Deletes ALL video thumbnails of all users. They will be regenerated the next time a video is listed.": "Löscht ALLE Video-Vorschaubilder aller Nutzer. Sie werden neu erzeugt, sobald ein Video wieder in einer Liste erscheint.",
         "Find and fix videos without thumbnail": "Videos ohne Vorschaubild finden und reparieren",
         "Finished.": "Fertig.",

@@ -51,7 +51,7 @@
 <div class="section">
 	<h2><?php p($l->t('Delete ALL my thumbnails')); ?></h2>
 	<p class="settings-hint">
-		<?php p($l->t('Deletes ALL existing video thumbnails. They will be regenerated the next time the video is listed.')); ?>
+		<?php p($l->t('Deletes ALL thumbnails of your videos. They will be regenerated the next time a video is listed.')); ?>
 	</p>
 	<button id="cvt-delete-mine" class="button" type="button"><?php p($l->t('Delete all my thumbnails')); ?></button>
 	<span id="cvt-delete-mine-status" aria-live="polite"></span>
