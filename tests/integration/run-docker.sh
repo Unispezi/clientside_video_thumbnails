@@ -36,7 +36,7 @@ curl -sf "http://localhost:$PORT/status.php" | grep -q '"installed":true' || { d
 
 # Copied in after install: mounting into custom_apps makes it root-owned, which breaks the installer on Nextcloud 31
 docker exec "$NAME" sh -c 'mkdir -p /var/www/html/custom_apps/clientside_video_thumbnails &&
-	tar -C /opt/clientside_video_thumbnails --exclude=./vendor --exclude=./tests --exclude=./.git -cf - . |
+	tar -C /opt/clientside_video_thumbnails --exclude=./vendor --exclude=./tests --exclude=./docs --exclude=./.git -cf - . |
 	tar -C /var/www/html/custom_apps/clientside_video_thumbnails -xf - &&
 	chown -R www-data:www-data /var/www/html/custom_apps'
 

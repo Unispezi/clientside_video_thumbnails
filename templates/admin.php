@@ -9,7 +9,7 @@
 ?>
 <div id="clientside-video-thumbnails-admin" data-delete-all-url="<?php p($_['deleteAllUrl']); ?>">
 <div class="section">
-	<h2><?php p($l->t('Clientside Video Thumbnails')); ?></h2>
+	<h2><?php p($l->t('Clientside Video Thumbnails')); ?> <a target="_blank" rel="noreferrer noopener" class="icon-info" title="<?php p($l->t('Open documentation')); ?>" href="https://unispezi.github.io/clientside_video_thumbnails/admin.html"></a></h2>
 	<p class="settings-hint">
 		<?php p($l->t('Video previews are rendered in the browser of whoever opens a folder in Files, and uploaded to this server. Videos the browser can\'t play stay without a preview.')); ?>
 	</p>

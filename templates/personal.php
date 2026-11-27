@@ -8,7 +8,7 @@
 ?>
 <div id="clientside-video-thumbnails-personal">
 <div class="section">
-	<h2><?php p($l->t('Find and fix videos without thumbnail')); ?></h2>
+	<h2><?php p($l->t('Find and fix videos without thumbnail')); ?> <a target="_blank" rel="noreferrer noopener" class="icon-info" title="<?php p($l->t('Open documentation')); ?>" href="https://unispezi.github.io/clientside_video_thumbnails/user.html"></a></h2>
 	<p class="settings-hint">
 		<?php p($l->t('Searches all your files for videos without a preview and renders one in this browser. Keep this page open until it is done. Each video costs a few MB of data.')); ?>
 	</p>

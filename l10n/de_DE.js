@@ -24,6 +24,7 @@ OC.L10N.register(
         "Not charging. Rendering many videos drains the battery.": "Gerät lädt nicht. Viele Videos leeren den Akku.",
         "Not signed in.": "Nicht angemeldet.",
         "Only the first {count} videos were searched.": "Nur die ersten {count} Videos wurden durchsucht.",
+        "Open documentation": "Dokumentation öffnen",
         "Request failed ({status})": "Anfrage fehlgeschlagen ({status})",
         "Retry videos with errors": "Videos mit Fehlern erneut versuchen",
         "Search failed ({status})": "Suche fehlgeschlagen ({status})",
