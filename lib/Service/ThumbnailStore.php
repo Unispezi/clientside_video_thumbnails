@@ -59,8 +59,15 @@ class ThumbnailStore {
 		$this->forgetServerPreviews($fileId);
 	}
 
+	/**
+	 * Removes the stored thumbnail and the previews Nextcloud made from it.
+	 */
 	public function delete(int $fileId): void {
-		$this->get($fileId)?->delete();
+		$thumb = $this->get($fileId);
+		if ($thumb !== null) {
+			$thumb->delete();
+			$this->forgetServerPreviews($fileId);
+		}
 	}
 
 	/**

@@ -79,6 +79,25 @@ class ThumbnailController extends Controller {
 	}
 
 	/**
+	 * Deletes the thumbnails of the signed-in user's own videos, not of videos others shared with them.
+	 */
+	#[NoAdminRequired]
+	public function deleteMine(): JSONResponse {
+		$user = $this->userSession->getUser();
+		if ($user === null) {
+			return $this->error('Not signed in', Http::STATUS_UNAUTHORIZED);
+		}
+		$deleted = 0;
+		foreach ($this->rootFolder->getUserFolder($user->getUID())->searchByMime('video') as $node) {
+			if ($node->getOwner()?->getUID() === $user->getUID() && $this->store->exists($node->getId())) {
+				$this->store->delete($node->getId());
+				$deleted++;
+			}
+		}
+		return new JSONResponse(['status' => 'success', 'deleted' => $deleted]);
+	}
+
+	/**
 	 * Admin only (no NoAdminRequired): deletes all thumbnails, for testing.
 	 */
 	public function deleteAll(): JSONResponse {

@@ -25,6 +25,8 @@ Under **Personal settings → Video thumbnails → Find and fix videos without t
 
 ## Starting over
 
+Under **Personal settings → Video thumbnails → Delete all my thumbnails**, every user can delete the thumbnails of their own videos. Videos others shared with them keep theirs.
+
 For testing, **Administration settings → Additional settings → Clientside Video Thumbnails → Delete all video thumbnails** removes every thumbnail of all users, along with the previews Nextcloud made from them, and clears the failure cache of the browser you click it in. Videos get new thumbnails the next time they show up in Files or in find-and-fix mode.
 
 `tests/vps/deploy.sh` puts a test instance on a server of your own over SSH; see the comment at its top.

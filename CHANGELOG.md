@@ -12,6 +12,7 @@ Forked from [Video Thumbnail Relay](https://github.com/silversong88/video_thumbs
 - A find-and-fix mode in the personal settings: finds all videos without a preview and renders them in the browser, with progress and a list of failures.
 - Support for Nextcloud 34.
 - Mobile browsers: muted playback kick-off when iOS Safari ignores `preload`, waiting for the decoded frame before drawing, and no rendering while the data saver is on.
+- Personal settings: a button that deletes the thumbnails of all your own videos.
 - Admin settings: a button that deletes all video thumbnails, for testing.
 
 ### Changed

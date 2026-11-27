@@ -28,4 +28,11 @@
 		<summary id="cvt-failures-title"></summary>
 		<ul id="cvt-failures-list"></ul>
 	</details>
+
+	<h3><?php p($l->t('Delete my thumbnails')); ?></h3>
+	<p class="settings-hint">
+		<?php p($l->t('Deletes the thumbnails of all your own videos. Videos others shared with you keep theirs. Your videos get new ones the next time they show up in Files or here.')); ?>
+	</p>
+	<button id="cvt-delete-mine" class="button" type="button"><?php p($l->t('Delete all my thumbnails')); ?></button>
+	<span id="cvt-delete-mine-status" aria-live="polite"></span>
 </div>

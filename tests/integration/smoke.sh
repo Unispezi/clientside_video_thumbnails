@@ -100,6 +100,20 @@ admin -X POST "$NC_BASE/ocs/v2.php/cloud/users" -d userid=vtr-bob --data-urlenco
 bob() { curl -s -o /dev/null -w '%{http_code}' -u "vtr-bob:$bob_pass" -H 'OCS-APIRequest: true' "$@"; }
 check "non-admin cannot deleteAll" 403 "$(bob -X POST "$API/deleteAll")"
 check "non-admin cannot upload for admin's file" 404 "$(bob -F path=/vtr-test/sample.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload")"
+
+echo "== deleting one's own thumbnails"
+bob_body() { curl -s -u "vtr-bob:$bob_pass" -H 'OCS-APIRequest: true' "$@"; }
+bob_has_preview() {
+	bob_body -X PROPFIND -H 'Depth: 0' --data '<?xml version="1.0"?><d:propfind xmlns:d="DAV:" xmlns:nc="http://nextcloud.org/ns"><d:prop><nc:has-preview/></d:prop></d:propfind>' "$NC_BASE/remote.php/dav/files/vtr-bob/$1" |
+		grep -oE '<nc:has-preview>[a-z]+' | sed 's/.*>//'
+}
+bob_body -T "$FIX/sample.mp4" "$NC_BASE/remote.php/dav/files/vtr-bob/bob.mp4" -o /dev/null
+check "bob uploads a thumbnail for his video" 200 "$(bob -F path=/bob.mp4 -F "thumbnail=@$FIX/thumb.jpg" "$API/upload")"
+admin -X POST "$NC_BASE/ocs/v2.php/apps/files_sharing/api/v1/shares" -d path=/vtr-test/sample.mp4 -d shareType=0 -d shareWith=vtr-bob -o /dev/null
+check "bob sees the video the admin shared, with its preview" true "$(bob_has_preview sample.mp4)"
+check "deleteMine counts only bob's own video" '"deleted":1' "$(bob_body -X POST "$API/deleteMine" | grep -oE '"deleted":[0-9]+')"
+check "bob's video lost its thumbnail" false "$(bob_has_preview bob.mp4)"
+check "the shared video kept its thumbnail" true "$(has_preview vtr-test/sample.mp4)"
 admin -X DELETE "$NC_BASE/ocs/v2.php/cloud/users/vtr-bob" -o /dev/null
 
 echo "== orphan cleanup job"

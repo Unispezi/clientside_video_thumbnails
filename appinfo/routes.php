@@ -10,6 +10,7 @@ declare(strict_types=1);
 return [
 	'routes' => [
 		['name' => 'thumbnail#upload', 'url' => '/thumbnail/upload', 'verb' => 'POST'],
+		['name' => 'thumbnail#deleteMine', 'url' => '/thumbnail/deleteMine', 'verb' => 'POST'],
 		['name' => 'thumbnail#deleteAll', 'url' => '/thumbnail/deleteAll', 'verb' => 'POST'],
 	],
 ];

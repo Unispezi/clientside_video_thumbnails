@@ -185,6 +185,33 @@
 			}
 		}
 
+		const deleteMine = el('cvt-delete-mine')
+		const deleteMineStatus = el('cvt-delete-mine-status')
+		deleteMine.addEventListener('click', async () => {
+			if (!window.confirm(translate('Delete the thumbnails of all your videos?'))) {
+				return
+			}
+			deleteMine.disabled = true
+			deleteMineStatus.textContent = ''
+			try {
+				const response = await fetch(webroot() + '/index.php/apps/' + APP_ID + '/thumbnail/deleteMine', {
+					method: 'POST',
+					headers: { requesttoken: requestToken(), Accept: 'application/json' },
+				})
+				if (!response.ok) {
+					throw new Error(translate('Request failed ({status})', { status: response.status }))
+				}
+				const { deleted } = await response.json()
+				// So that this browser also tries again the videos it could not render before
+				clearFailed()
+				deleteMineStatus.textContent = translatePlural('{count} thumbnail deleted.', '{count} thumbnails deleted.', deleted, { count: deleted })
+			} catch (e) {
+				deleteMineStatus.textContent = e.message
+			} finally {
+				deleteMine.disabled = false
+			}
+		})
+
 		start.addEventListener('click', run)
 		stop.addEventListener('click', () => {
 			// Takes effect after the video being rendered now
