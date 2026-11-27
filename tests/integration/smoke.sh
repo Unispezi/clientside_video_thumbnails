@@ -82,14 +82,17 @@ check "request with secret accepted" 200 "$(code -H "X-ClientsideVideoThumbnails
 
 echo "== browser session (Files app script)"
 jar="$TMP/cookies"
-# Session cookie without scripting the login form: Nextcloud keeps the user signed in on the session
-# that a Basic-auth request opens, the same way the desktop client avoids re-sending its password.
-# Every later request sends only the cookie, never an Authorization header.
-session_token="$(curl -s -c "$jar" -b "$jar" -u "$NC_ADMIN:$NC_PASS" "$NC_BASE/index.php/csrftoken" | sed -nE 's/.*"token":"([^"]+)".*/\1/p' || true)"
+# Sign in through the login form like a browser. Nextcloud rejects login posts without an Origin header.
+login_token="$(curl -sL -c "$jar" -b "$jar" "$NC_BASE/index.php/login" | grep -oE 'data-requesttoken="[^"]+"' | head -1 | cut -d'"' -f2 || true)"
+login_result="$(curl -s -c "$jar" -b "$jar" -o /dev/null -w '%{http_code} %{redirect_url}' -X POST -H "Origin: $NC_BASE" \
+	--data-urlencode "user=$NC_ADMIN" --data-urlencode "password=$NC_PASS" --data-urlencode "requesttoken=$login_token" \
+	--data-urlencode "timezone=UTC" --data-urlencode "timezone_offset=0" "$NC_BASE/index.php/login" || true)"
+session_token="$(curl -s -c "$jar" -b "$jar" "$NC_BASE/index.php/csrftoken" | sed -nE 's/.*"token":"([^"]+)".*/\1/p' || true)"
 session_answer="$(curl -s -c "$jar" -b "$jar" -H 'OCS-APIRequest: true' -w ' HTTP %{http_code}' "$NC_BASE/ocs/v2.php/cloud/user?format=json" || true)"
 session_user="$(grep -oE '"id":"[^"]+"' <<<"$session_answer" | head -1 | cut -d'"' -f4 || true)"
 check "cookie session signed in" "$NC_ADMIN" "$session_user"
 if [[ "$session_user" != "$NC_ADMIN" ]]; then
+	echo "        login token: ${#login_token} chars, login answer: $login_result"
 	echo "        csrftoken: ${#session_token} chars, cookies: $(sed 's/^#HttpOnly_//' "$jar" | grep -v '^#' | awk 'NF {print $6}' | tr '\n' ' ' || true)"
 	printf '        answer: %.300s\n' "$session_answer"
 fi
